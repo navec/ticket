@@ -1,7 +1,7 @@
 import {Inject, Injectable} from 'core';
 import {AuthService} from '../business/auth.service';
 import {AuthRepositoryInMemory} from '../infrastructure/auth.repository';
-import {HttpStatusCode} from 'core/src/constants';
+import {HttpStatusCode} from 'core';
 import {CreateUserDto} from '../use-cases/dtos/create-user.dto';
 
 @Injectable()

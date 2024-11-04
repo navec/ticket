@@ -1,4 +1,3 @@
-import 'module-alias/register';
 import {ServerAppFactory} from 'core';
 import {AuthController} from './presentation';
 
