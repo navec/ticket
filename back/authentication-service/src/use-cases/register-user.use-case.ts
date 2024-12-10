@@ -1,9 +1,10 @@
-import {Inject, Injectable} from 'core';
+import {Inject, Injectable, InjectableBis} from 'core';
 import {AuthService} from '../business/auth.service';
 import {AuthRepositoryInMemory} from '../infrastructure/auth.repository';
 import {HttpStatusCode} from 'core';
 import {CreateUserDto} from '../use-cases/dtos/create-user.dto';
 
+@InjectableBis()
 @Injectable()
 export class RegisterUserUseCase {
   constructor(

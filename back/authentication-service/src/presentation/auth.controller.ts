@@ -1,6 +1,7 @@
 import {
   BodyParam,
   Controller,
+  ControllerBis,
   HttpStatus,
   HttpStatusCode,
   Inject,
@@ -11,6 +12,7 @@ import {LoginUserUseCase} from '../use-cases/login-user.use-case';
 import {LoginUserDto} from '../use-cases/dtos/login-user.dto';
 import {CreateUserDto} from '../use-cases/dtos/create-user.dto';
 
+@ControllerBis('auth')
 @Controller('auth')
 export class AuthController {
   constructor(

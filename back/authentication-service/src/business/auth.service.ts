@@ -1,6 +1,7 @@
-import {Injectable} from 'core';
+import {Injectable, InjectableBis} from 'core';
 import {createHash} from 'crypto';
 
+@InjectableBis()
 @Injectable()
 export class AuthService {
   async hashPassword(password: string): Promise<string> {
