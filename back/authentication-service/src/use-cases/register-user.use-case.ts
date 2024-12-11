@@ -1,15 +1,13 @@
-import {Inject, Injectable, InjectableBis} from 'core';
+import {Injectable} from 'core';
 import {AuthService} from '../business/auth.service';
 import {AuthRepositoryInMemory} from '../infrastructure/auth.repository';
-import {HttpStatusCode} from 'core';
 import {CreateUserDto} from '../use-cases/dtos/create-user.dto';
 
-@InjectableBis()
 @Injectable()
 export class RegisterUserUseCase {
   constructor(
-    @Inject() private readonly authService: AuthService,
-    @Inject() private readonly authRepository: AuthRepositoryInMemory
+    private readonly authService: AuthService,
+    private readonly authRepository: AuthRepositoryInMemory
   ) {}
 
   async execute({email, password}: CreateUserDto) {
@@ -17,7 +15,7 @@ export class RegisterUserUseCase {
     if (existingUser) {
       throw new Error(
         JSON.stringify({
-          code: HttpStatusCode.BAD_REQUEST,
+          // code: HttpStatusCode.BAD_REQUEST,
           message: 'User already exists',
         })
       );

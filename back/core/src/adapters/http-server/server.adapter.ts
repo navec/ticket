@@ -1,9 +1,8 @@
-import http, {Server} from 'node:http';
-import {ServerAdapter, Request, Response} from '../abstracts';
-import {HttpServerRequestAdapter} from './request.adapter';
-import {HttpServerResponseAdapter} from './response.adapter';
-import {RouterResolver} from 'src/core/routers/router-resolver';
-import {resolve} from 'node:path';
+import http, { Server } from "node:http";
+import { ServerAdapter, Request, Response } from "../abstracts";
+import { HttpServerRequestAdapter } from "./request.adapter";
+import { HttpServerResponseAdapter } from "./response.adapter";
+import { RouterResolver } from "../..";
 
 export class HttpServerAdapter extends ServerAdapter {
   private server: Server;
@@ -19,7 +18,7 @@ export class HttpServerAdapter extends ServerAdapter {
   }
 
   use(middleware: Function): void {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
   }
 
   async listen(port: number, callback?: () => void): Promise<ServerAdapter> {

@@ -1,5 +1,5 @@
 import {AppModule} from './app.module';
-import {AppBootFactory} from './core/boot';
+import {AppBootFactory} from 'core';
 
 const port = 3000;
 const hostname = 'localhost';

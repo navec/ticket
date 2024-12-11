@@ -1,5 +1,5 @@
-import {ServerResponse} from 'node:http';
-import {Response} from '../abstracts';
+import { ServerResponse } from "node:http";
+import { Response } from "../abstracts";
 
 export class HttpServerResponseAdapter extends Response {
   constructor(private res: ServerResponse) {
@@ -10,9 +10,15 @@ export class HttpServerResponseAdapter extends Response {
     this.res.setHeader(key, value);
   }
 
-  send(body: any, opt = {statusCode: 200, format: 'application/json'}): void {
-    this.res.setHeader('Content-Type', opt.format);
-    this.res.statusCode = opt.statusCode;
+  send(body: any, opt = {}): void {
+    const { statusCode, format } = {
+      statusCode: 200,
+      format: "application/json",
+      ...opt,
+    };
+
+    this.res.setHeader("Content-Type", format);
+    this.res.statusCode = statusCode;
     this.res.end(JSON.stringify(body, null, 3));
   }
 }

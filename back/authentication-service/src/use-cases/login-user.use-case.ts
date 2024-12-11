@@ -1,16 +1,14 @@
-import {Inject, Injectable, InjectableBis} from 'core';
+import {Injectable} from 'core';
 import {AuthService} from '../business/auth.service';
 import {AuthRepositoryInMemory} from '../infrastructure/auth.repository';
-import {HttpStatusCode} from 'core';
 import {LoginUserDto} from '../use-cases/dtos/login-user.dto';
 import {UserProfile} from '../business/entities/user-profile.entity';
 
-@InjectableBis()
 @Injectable()
 export class LoginUserUseCase {
   constructor(
-    @Inject() private readonly authService: AuthService,
-    @Inject() private readonly authRepository: AuthRepositoryInMemory
+    private readonly authService: AuthService,
+    private readonly authRepository: AuthRepositoryInMemory
   ) {}
 
   async execute({email, password}: LoginUserDto): Promise<UserProfile> {
@@ -32,7 +30,7 @@ export class LoginUserUseCase {
     } catch (error) {
       throw new Error(
         JSON.stringify({
-          code: HttpStatusCode.FORBIDDEN,
+          // code: HttpStatusCode.FORBIDDEN,
           message: 'connection not allowed',
         })
       );

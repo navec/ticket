@@ -1,9 +1,8 @@
-import {Inject, Injectable, InjectableBis} from 'core';
+import {Injectable} from 'core';
 import {AuthRepository} from '../business/interfaces/user.repository';
 import {UserLogin} from '../business/entities/user-login.entity';
 import {UserProfile} from '../business/entities/user-profile.entity';
 
-@InjectableBis()
 @Injectable()
 export class AuthRepositoryInMemory implements AuthRepository {
   private users: Record<string, {email: string; password: string}> = {

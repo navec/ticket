@@ -1,7 +1,6 @@
-import {Injectable, InjectableBis} from 'core';
+import {Injectable} from 'core';
 import {createHash} from 'crypto';
 
-@InjectableBis()
 @Injectable()
 export class AuthService {
   async hashPassword(password: string): Promise<string> {
@@ -15,8 +14,4 @@ export class AuthService {
     const currentPwdHashed = await this.hashPassword(password);
     return currentPwdHashed === hashedPassword;
   }
-
-  // generateJwtToken(user: User): string {
-  //   return this.jwtService.sign({id: user.id, roles: user.roles});
-  // }
 }
