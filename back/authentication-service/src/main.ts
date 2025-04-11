@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await AppBootFactory.create(AppModule);
   app.useValidator(ValidatorType.ZOD);
 
-  app.listen(3000, () => {
+  await app.listen(3000, () => {
     console.log(
       '\x1b[33m',
       `[INFO] : Server running at http://${hostname}:${port}/`
@@ -16,4 +16,4 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+void bootstrap();

@@ -1,7 +1,7 @@
-import http, { Server } from "node:http";
-import { ServerAdapter } from "../../abstracts";
-import { HttpServerRequestAdapter } from "./request.adapter";
-import { HttpServerResponseAdapter } from "./response.adapter";
+import http, {Server} from 'node:http';
+import {ServerAdapter} from '../../abstracts';
+import {HttpServerRequestAdapter} from './request.adapter';
+import {HttpServerResponseAdapter} from './response.adapter';
 import {
   BadRequestException,
   DtoExtractor,
@@ -13,11 +13,11 @@ import {
   RouterResolver,
   ValidatorType,
   ZodAdapter,
-} from "../../..";
+} from '../../..';
 
 export class HttpServerAdapter extends ServerAdapter {
   private server: Server;
-  private middlewares: { type: "validator" | "default"; handler: Function }[] =
+  private middlewares: {type: 'validator' | 'default'; handler: Function}[] =
     [];
 
   constructor() {
@@ -47,17 +47,17 @@ export class HttpServerAdapter extends ServerAdapter {
 
         // Exécution des middlewares
         await Promise.all(
-          this.middlewares.map(async ({ type, handler }) => {
+          this.middlewares.map(async ({type, handler}) => {
             if (!response.finished) {
-              if (type === "validator") {
-                const dtoExtractor = new DtoExtractor({ target, method });
+              if (type === 'validator') {
+                const dtoExtractor = new DtoExtractor({target, method});
                 const schemas = dtoExtractor.extract();
                 await handler(schemas, params);
               } else {
                 await handler(request, response);
               }
             }
-          })
+          }),
         );
 
         const data = await endpoint.method.bound(...params);
@@ -70,20 +70,20 @@ export class HttpServerAdapter extends ServerAdapter {
   }
 
   use(middleware: Function): void {
-    this.middlewares.push({ type: "default", handler: middleware });
+    this.middlewares.push({type: 'default', handler: middleware});
   }
 
   useValidator(validator: ValidatorType) {
     switch (validator) {
       case ValidatorType.ZOD:
         this.middlewares.push({
-          type: "validator",
+          type: 'validator',
           handler: new ZodAdapter().validate,
         });
         break;
       default:
         throw new BadRequestException(
-          `Validator type ${validator} is not supported. Supported types are: ${Object.values(ValidatorType).join(", ")}`
+          `Validator type ${validator} is not supported. Supported types are: ${Object.values(ValidatorType).join(', ')}`,
         );
     }
   }

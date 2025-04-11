@@ -6,35 +6,35 @@ import {
   RES_PARAM_METADATA,
   SCHEMA_PARAM_METADATA,
   DESIGN_PARAM_TYPES,
-} from "../../constants";
-import { getMetadata } from "../utils";
+} from '../../constants';
+import {getMetadata} from '../utils';
 
 const createParam =
   (type: string, key: string, name?: string) =>
   (
     target: Object,
     propertyKey: string | symbol | undefined,
-    parameterIndex: number
+    parameterIndex: number,
   ) => {
     if (!propertyKey) {
       throw new Error(`property of ${type} is required`);
     }
 
     const value = getMetadata(key, target) || [];
-    value.push({ key: name, index: parameterIndex });
+    value.push({key: name, index: parameterIndex});
     Reflect.defineMetadata(key, value, target, propertyKey);
 
     const paramTypes = Reflect.getMetadata(
       DESIGN_PARAM_TYPES,
       target,
-      propertyKey
+      propertyKey,
     );
 
     const dtoSchema = paramTypes[parameterIndex];
     if (dtoSchema?.prototype?.__isDTO) {
       const dtos =
         Reflect.getMetadata(SCHEMA_PARAM_METADATA, target, propertyKey) || [];
-      dtos.push({ index: parameterIndex, dtodWithSchema: dtoSchema });
+      dtos.push({index: parameterIndex, dtodWithSchema: dtoSchema});
       Reflect.defineMetadata(SCHEMA_PARAM_METADATA, dtos, target, propertyKey);
     }
   };

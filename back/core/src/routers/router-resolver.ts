@@ -9,8 +9,8 @@ import {
   REQ_PARAM_METADATA,
   RES_PARAM_METADATA,
   ParamType,
-} from "..";
-import { HttpException, InternalServerException } from "../exceptions";
+} from '..';
+import {HttpException, InternalServerException} from '../exceptions';
 
 export class RouterResolver {
   private metadataKeyByParamType = {
@@ -23,23 +23,23 @@ export class RouterResolver {
 
   private getAllRequestParams(
     controller: any,
-    method?: string
-  ): { type: ParamType; param: { index: number; key?: string } }[] {
+    method?: string,
+  ): {type: ParamType; param: {index: number; key?: string}}[] {
     return Object.entries(this.metadataKeyByParamType).flatMap(
       ([type, key]) => {
         const params = getMetadata(key, controller, method) || [];
-        return params.map((param: any) => ({ type, param }));
-      }
+        return params.map((param: any) => ({type, param}));
+      },
     );
   }
 
   private async buildMethodArgs(
     req: Request,
     res: Response,
-    params: { type: ParamType; param: { index: number; key?: string } }[]
+    params: {type: ParamType; param: {index: number; key?: string}}[],
   ) {
     const data = await req.body;
-    return params.map(({ type, param: { key } }) => {
+    return params.map(({type, param: {key}}) => {
       switch (type) {
         case ParamType.body:
           return key ? data[key] : data;
@@ -61,11 +61,11 @@ export class RouterResolver {
     try {
       const endpoint = EndpointsRegistry.get(req.pathname);
       if (!endpoint) {
-        res.send({ message: `${req.pathname} not found`, code: 404 });
+        res.send({message: `${req.pathname} not found`, code: 404});
         return;
       }
 
-      const { controller, method } = endpoint;
+      const {controller, method} = endpoint;
       // console.log(" ====>> controller <<=====", controller);
       const params = this.getAllRequestParams(controller, method.name);
 

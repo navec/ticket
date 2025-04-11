@@ -2,7 +2,7 @@ export enum Scope {
   /**
    * The singleton scope will return the same instance, which is cached.
    * This scope is the default if no other scope is specified.
-   * 
+   *
    * @example
 
    *  @Scope('singleton') // optional
@@ -14,7 +14,7 @@ export enum Scope {
 
   /**
    * The prototype scope will a different instance every time it is requested.
-   * 
+   *
    * @example
 
    *  @Scope('prototype')
@@ -26,7 +26,7 @@ export enum Scope {
 
   /**
    * The request scope, we can define the request scope.
-   * 
+   *
    * @example
 
    *  @Scope('request')

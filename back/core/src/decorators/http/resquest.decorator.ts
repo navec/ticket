@@ -5,7 +5,7 @@ const createHttpRequest = (httpMethod: HttpMethod, path = '/') => {
   return function (
     _: any,
     __: string,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ): PropertyDescriptor {
     const originalMethod = descriptor.value;
 

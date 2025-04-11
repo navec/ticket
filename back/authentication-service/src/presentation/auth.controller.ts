@@ -1,4 +1,4 @@
-import {BodyParam, Controller, DtoSchema, Post} from 'core'; // LogDtoType
+import {BodyParam, Controller, Post} from 'core';
 import {RegisterUserUseCase} from '../use-cases/register-user.use-case';
 import {LoginUserUseCase} from '../use-cases/login-user.use-case';
 import {LoginUserDto} from '../use-cases/dtos/login-user.dto';

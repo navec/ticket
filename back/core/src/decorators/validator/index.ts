@@ -1,1 +1,1 @@
-export * from "./schema.decorator";
+export * from './schema.decorator';

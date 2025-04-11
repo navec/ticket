@@ -4,7 +4,7 @@ export class ProviderInjector {
   static resolve(
     target: any,
     acceptedProviders = ProvidersRegistry.keys(),
-    alreadyResolved = new Set()
+    alreadyResolved = new Set(),
   ) {
     // Vérifie que le provider a bien été scanné
     if (!acceptedProviders.includes(target)) {

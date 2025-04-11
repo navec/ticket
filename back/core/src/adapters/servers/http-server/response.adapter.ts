@@ -1,6 +1,6 @@
-import { ServerResponse } from "node:http";
-import { Response } from "../../abstracts";
-import { HttpException } from "../../../exceptions";
+import {ServerResponse} from 'node:http';
+import {Response} from '../../abstracts';
+import {HttpException} from '../../../exceptions';
 
 export class HttpServerResponseAdapter extends Response {
   constructor(private res: ServerResponse) {
@@ -12,7 +12,7 @@ export class HttpServerResponseAdapter extends Response {
   }
 
   send(body: HttpException): void {
-    this.res.setHeader("Content-Type", "application/json");
+    this.res.setHeader('Content-Type', 'application/json');
     this.res.statusCode = body.statusCode;
     this.res.end(body.toJSONString());
   }

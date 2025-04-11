@@ -1,7 +1,7 @@
 export const getMetadata = (
   metadataKey: any,
   target: Object,
-  propertyKey?: string | symbol
+  propertyKey?: string | symbol,
 ) => {
   if (propertyKey) {
     return Reflect.getMetadata(metadataKey, target, propertyKey);

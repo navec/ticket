@@ -10,7 +10,7 @@ export class ControllerInjector {
   static resolve(
     target: any,
     acceptedControllers = ControllersRegistry.keys(),
-    acceptedProviders = ProvidersRegistry.keys()
+    acceptedProviders = ProvidersRegistry.keys(),
   ) {
     // Vérifie que le provider a bien été scanné
     if (!acceptedControllers.includes(target)) {

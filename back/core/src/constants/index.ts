@@ -1,1 +1,1 @@
-export * from "./http-status.constant";
+export * from './http-status.constant';

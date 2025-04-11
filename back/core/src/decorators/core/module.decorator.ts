@@ -8,7 +8,7 @@ export const Module = (opts: ModuleOptions) => {
     Reflect.defineMetadata(
       PROVIDER_SCOPE_METADATA,
       {...opts, type: 'module', scope: Scope.SINGLETON},
-      target
+      target,
     );
   };
 };

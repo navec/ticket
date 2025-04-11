@@ -1,4 +1,4 @@
-import { EndpointsRegistry } from "../registries";
+import {EndpointsRegistry} from '../registries';
 import {
   BODY_PARAM_METADATA,
   getMetadata,
@@ -10,13 +10,13 @@ import {
   RES_PARAM_METADATA,
   Response,
   SCHEMA_PARAM_METADATA,
-} from "..";
+} from '..';
 
 export class DtoExtractor {
-  constructor(private readonly options: { target: any; method: string }) {}
+  constructor(private readonly options: {target: any; method: string}) {}
 
   public extract() {
-    const { target, method } = this.options;
+    const {target, method} = this.options;
 
     const dtoWithSchemaList =
       getMetadata(SCHEMA_PARAM_METADATA, target, method) || [];
@@ -24,12 +24,12 @@ export class DtoExtractor {
     return dtoWithSchemaList.reduce(
       (
         acc: unknown[],
-        current: { index: number; dtodWithSchema: { schema: unknown } }
+        current: {index: number; dtodWithSchema: {schema: unknown}},
       ) => {
         acc[current.index] = current.dtodWithSchema.schema;
         return acc;
       },
-      []
+      [],
     );
   }
 }

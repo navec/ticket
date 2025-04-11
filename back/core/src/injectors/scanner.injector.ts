@@ -8,7 +8,7 @@ export class AutoLoader {
   public static loadProvider(
     provider: any,
     acceptedProviders: any[],
-    alreadyLoaded = new Set()
+    alreadyLoaded = new Set(),
   ) {
     const metadata = getMetadata(PROVIDER_SCOPE_METADATA, provider);
     if (metadata.type !== 'provider') {
@@ -18,13 +18,13 @@ export class AutoLoader {
 
     if (!acceptedProviders.includes(provider)) {
       throw new Error(
-        `${provider.name} is not accepted. Here is accepted provider list [ ${acceptedProviders.map(({name}) => name).join(', ')} ].`
+        `${provider.name} is not accepted. Here is accepted provider list [ ${acceptedProviders.map(({name}) => name).join(', ')} ].`,
       );
     }
 
     if (alreadyLoaded.has(provider)) {
       throw new Error(
-        `We have a cyclic dependency with ${provider.name} provider`
+        `We have a cyclic dependency with ${provider.name} provider`,
       );
     }
 
@@ -52,7 +52,7 @@ export class AutoLoader {
   public static loadController(
     controller: any,
     acceptedControllers: any[],
-    alreadyLoaded = new Set()
+    alreadyLoaded = new Set(),
   ) {
     const metadata = getMetadata(PROVIDER_SCOPE_METADATA, controller);
     if (metadata.type !== 'controller') {
@@ -62,13 +62,13 @@ export class AutoLoader {
 
     if (!acceptedControllers.includes(controller)) {
       throw new Error(
-        `${controller.name} is not accepted. Here is accepted controller list [ ${acceptedControllers.map(({name}) => name).join(', ')} ].`
+        `${controller.name} is not accepted. Here is accepted controller list [ ${acceptedControllers.map(({name}) => name).join(', ')} ].`,
       );
     }
 
     if (alreadyLoaded.has(controller)) {
       throw new Error(
-        `We have a cyclic dependency with ${controller.name} controller`
+        `We have a cyclic dependency with ${controller.name} controller`,
       );
     }
 

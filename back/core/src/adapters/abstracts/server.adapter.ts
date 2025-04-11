@@ -1,4 +1,4 @@
-import { ValidatorType } from "../../enums/validator-type.enum";
+import {ValidatorType} from '../../enums/validator-type.enum';
 
 export abstract class ServerAdapter {
   abstract use(middleware: Function): void;

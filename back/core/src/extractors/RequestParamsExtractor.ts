@@ -1,4 +1,4 @@
-import { EndpointsRegistry } from "../registries";
+import {EndpointsRegistry} from '../registries';
 import {
   BODY_PARAM_METADATA,
   getMetadata,
@@ -9,7 +9,7 @@ import {
   Request,
   RES_PARAM_METADATA,
   Response,
-} from "..";
+} from '..';
 
 export class RequestParamsExtractor {
   private metadataKeyByParamType = {
@@ -26,30 +26,30 @@ export class RequestParamsExtractor {
       response: Response;
       target: any;
       method: string;
-    }
+    },
   ) {}
 
   private getAllRequestParams(): {
     type: ParamType;
-    param: { index: number; key?: string };
+    param: {index: number; key?: string};
   }[] {
-    const { target, method } = this.options;
+    const {target, method} = this.options;
 
     return Object.entries(this.metadataKeyByParamType).flatMap(
       ([type, key]) => {
         const params = getMetadata(key, target, method) || [];
-        return params.map((param: any) => ({ type, param }));
-      }
+        return params.map((param: any) => ({type, param}));
+      },
     );
   }
 
   public async extract() {
-    const { request, response } = this.options;
+    const {request, response} = this.options;
     const body = await request.body;
 
     const params = this.getAllRequestParams();
 
-    return params.map(({ type, param: { key } }) => {
+    return params.map(({type, param: {key}}) => {
       switch (type) {
         case ParamType.body:
           return key ? body[key] : body;

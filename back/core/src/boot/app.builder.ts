@@ -1,11 +1,11 @@
-import { Injector, Scanner, ServerAdapter, RouterRegistry } from "..";
+import {Injector, Scanner, ServerAdapter, RouterRegistry} from '..';
 
 export class AppBuilder {
   private scanner: Scanner;
   private injector: Injector;
   private routerRegistry: RouterRegistry;
 
-  private app: { server?: ServerAdapter; module?: unknown };
+  private app: {server?: ServerAdapter; module?: unknown};
 
   constructor() {
     this.scanner = new Scanner();
@@ -26,9 +26,9 @@ export class AppBuilder {
   }
 
   build() {
-    const { server, module } = this.app;
+    const {server, module} = this.app;
     if (!server || !module) {
-      throw new Error("TODO add functional message");
+      throw new Error('TODO add functional message');
     }
 
     this.scanner.scan(module);

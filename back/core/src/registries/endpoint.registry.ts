@@ -1,27 +1,27 @@
 export class EndpointsRegistry {
   private static store = new Map<
     string,
-    { method: { bound: any; name: string }; controller: any; path: string }
+    {method: {bound: any; name: string}; controller: any; path: string}
   >();
   private static storeForVariblesPath = new Map<
     string,
-    { method: { bound: any; name: string }; controller: any; path: string }
+    {method: {bound: any; name: string}; controller: any; path: string}
   >();
 
   public static register(
     path: string,
-    target: { method: { bound: any; name: string }; controller: any }
+    target: {method: {bound: any; name: string}; controller: any},
   ) {
-    const splitPath = path.split("/");
+    const splitPath = path.split('/');
 
-    const isVariablePath = splitPath.some((segment) => segment.startsWith(":"));
+    const isVariablePath = splitPath.some(segment => segment.startsWith(':'));
     if (isVariablePath) {
       const variablePathRegex = splitPath
-        .map((segment) => (segment.startsWith(":") ? `([^/]+)` : segment))
-        .join("/");
-      this.storeForVariblesPath.set(variablePathRegex, { ...target, path });
+        .map(segment => (segment.startsWith(':') ? '([^/]+)' : segment))
+        .join('/');
+      this.storeForVariblesPath.set(variablePathRegex, {...target, path});
     } else {
-      this.store.set(path, { ...target, path });
+      this.store.set(path, {...target, path});
     }
   }
 
@@ -34,7 +34,7 @@ export class EndpointsRegistry {
       (pattern: string) => {
         const regex = new RegExp(pattern);
         return regex.test(path);
-      }
+      },
     );
 
     return key ? this.storeForVariblesPath.get(key) : null;
