@@ -1,9 +1,13 @@
-export class LoginUserDto {
-  email: string;
-  password: string;
+import {DtoSchema} from 'core';
+import {z} from 'zod';
 
-  constructor() {
-    this.email = '';
-    this.password = '';
-  }
+const LoginUserSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+@DtoSchema(LoginUserSchema)
+export class LoginUserDto {
+  email!: string;
+  password!: string;
 }

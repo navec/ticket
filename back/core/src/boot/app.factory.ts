@@ -1,22 +1,26 @@
-import {HttpServerAdapter, ServerAdapter, ServerType} from '..';
-import {AppBuilder} from './app.builder';
+import { HttpServerAdapter, ServerAdapter, ServerType } from "..";
+import { ValidatorType } from "../enums/validator-type.enum";
+import { AppBuilder } from "./app.builder";
+import {
+  SERVER_TYPE_ADAPTER_REGISTRY,
+  VALIDATOR_TYPE_ADAPTER_REGISTRY,
+} from "./app.constants";
 
 class AppFactory {
   getServer(type = ServerType.HTTP_SERVER): ServerAdapter {
-    switch (type) {
-      case ServerType.HTTP_SERVER:
-        return new HttpServerAdapter();
-      case ServerType.EXPRESS:
-        throw new Error('Method not implemented');
-      default:
-        throw new Error(`Unsupported server type: ${type}`);
+    const Adapter = SERVER_TYPE_ADAPTER_REGISTRY[type];
+
+    if (!Adapter || Adapter === null) {
+      throw new Error(`Unsupported or unimplemented server type: ${type}`);
     }
+
+    return new Adapter();
   }
 
-  async create(module: any, type?: ServerType) {
+  async create(module: unknown, opt?: { type?: ServerType }) {
     return new AppBuilder()
       .setModule(module)
-      .setServer(this.getServer(type))
+      .setServer(this.getServer(opt?.type))
       .build();
   }
 }

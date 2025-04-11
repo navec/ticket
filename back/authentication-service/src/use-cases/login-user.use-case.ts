@@ -1,4 +1,9 @@
-import {Injectable} from 'core';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from 'core';
 import {AuthService} from '../business/auth.service';
 import {AuthRepositoryInMemory} from '../infrastructure/auth.repository';
 import {LoginUserDto} from '../use-cases/dtos/login-user.dto';
@@ -15,7 +20,7 @@ export class LoginUserUseCase {
     try {
       const user = this.authRepository.findUserLoginByEmail(email);
       if (!user) {
-        throw new Error('User not found');
+        throw new NotFoundException('User not found');
       }
 
       const isValid = await this.authService.validatePassword(
@@ -23,17 +28,11 @@ export class LoginUserUseCase {
         user.password
       );
       if (!isValid) {
-        throw new Error('Password not valid');
+        throw new BadRequestException('Password not valid');
       }
-      // Retourne le profile de l'utilisateur
       return {email: user.email};
     } catch (error) {
-      throw new Error(
-        JSON.stringify({
-          // code: HttpStatusCode.FORBIDDEN,
-          message: 'connection not allowed',
-        })
-      );
+      throw new ForbiddenException('connection not allowed');
     }
   }
 }

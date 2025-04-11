@@ -4,8 +4,10 @@ import {
   PATH_PARAM_METADATA,
   REQ_PARAM_METADATA,
   RES_PARAM_METADATA,
-} from '../../constants';
-import {getMetadata} from '../utils';
+  SCHEMA_PARAM_METADATA,
+  DESIGN_PARAM_TYPES,
+} from "../../constants";
+import { getMetadata } from "../utils";
 
 const createParam =
   (type: string, key: string, name?: string) =>
@@ -18,9 +20,23 @@ const createParam =
       throw new Error(`property of ${type} is required`);
     }
 
-    const current = getMetadata(key, target) || [];
-    const value = [...current, {key: name, index: parameterIndex}];
-    Reflect.defineMetadata(key, value, target);
+    const value = getMetadata(key, target) || [];
+    value.push({ key: name, index: parameterIndex });
+    Reflect.defineMetadata(key, value, target, propertyKey);
+
+    const paramTypes = Reflect.getMetadata(
+      DESIGN_PARAM_TYPES,
+      target,
+      propertyKey
+    );
+
+    const dtoSchema = paramTypes[parameterIndex];
+    if (dtoSchema?.prototype?.__isDTO) {
+      const dtos =
+        Reflect.getMetadata(SCHEMA_PARAM_METADATA, target, propertyKey) || [];
+      dtos.push({ index: parameterIndex, dtodWithSchema: dtoSchema });
+      Reflect.defineMetadata(SCHEMA_PARAM_METADATA, dtos, target, propertyKey);
+    }
   };
 
 export const BodyParam = (name?: string): ParameterDecorator => {

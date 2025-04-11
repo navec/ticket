@@ -1,8 +1,8 @@
-import {BodyParam, Controller, Post} from 'core';
+import {BodyParam, Controller, DtoSchema, Post} from 'core'; // LogDtoType
 import {RegisterUserUseCase} from '../use-cases/register-user.use-case';
 import {LoginUserUseCase} from '../use-cases/login-user.use-case';
 import {LoginUserDto} from '../use-cases/dtos/login-user.dto';
-import {CreateUserDto} from '../use-cases/dtos/create-user.dto';
+import {CreateUserDto} from '@use-cases/dtos/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,13 +11,14 @@ export class AuthController {
     private readonly loginUserUseCase: LoginUserUseCase
   ) {}
 
-  @Post('register')
+  @Post('/register')
   async register(@BodyParam() createUserDto: CreateUserDto) {
     return this.registerUserUseCase.execute(createUserDto);
   }
 
-  @Post('login')
-  async login(@BodyParam() loginDto: LoginUserDto) {
+  @Post('/login')
+  async login(@BodyParam('username') loginDto: LoginUserDto) {
+    console.log('inside');
     return this.loginUserUseCase.execute(loginDto);
   }
 }

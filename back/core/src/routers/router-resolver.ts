@@ -8,66 +8,73 @@ import {
   PATH_PARAM_METADATA,
   REQ_PARAM_METADATA,
   RES_PARAM_METADATA,
+  ParamType,
 } from "..";
+import { HttpException, InternalServerException } from "../exceptions";
 
 export class RouterResolver {
-  private getParams(controller: any) {
-    return [
-      { type: "body", key: BODY_PARAM_METADATA },
-      { type: "path", key: PATH_PARAM_METADATA },
-      { type: "query", key: QUERY_PARAM_METADATA },
-      { type: "req", key: REQ_PARAM_METADATA },
-      { type: "res", key: RES_PARAM_METADATA },
-    ].flatMap(({ type, key }) => {
-      const params = getMetadata(key, controller) || [];
-      return params.map((param: any) => ({ type, param }));
+  private metadataKeyByParamType = {
+    [ParamType.body]: BODY_PARAM_METADATA,
+    [ParamType.path]: PATH_PARAM_METADATA,
+    [ParamType.query]: QUERY_PARAM_METADATA,
+    [ParamType.req]: REQ_PARAM_METADATA,
+    [ParamType.res]: RES_PARAM_METADATA,
+  };
+
+  private getAllRequestParams(
+    controller: any,
+    method?: string
+  ): { type: ParamType; param: { index: number; key?: string } }[] {
+    return Object.entries(this.metadataKeyByParamType).flatMap(
+      ([type, key]) => {
+        const params = getMetadata(key, controller, method) || [];
+        return params.map((param: any) => ({ type, param }));
+      }
+    );
+  }
+
+  private async buildMethodArgs(
+    req: Request,
+    res: Response,
+    params: { type: ParamType; param: { index: number; key?: string } }[]
+  ) {
+    const data = await req.body;
+    return params.map(({ type, param: { key } }) => {
+      switch (type) {
+        case ParamType.body:
+          return key ? data[key] : data;
+        case ParamType.query:
+          return key ? req.query[key] : req.query;
+        case ParamType.path:
+          return key ? req.path[key] : req.path;
+        case ParamType.req:
+          return req.req;
+        case ParamType.res:
+          return res;
+        default:
+          throw new Error(`Unsupported parameter type: ${type}`);
+      }
     });
   }
 
   public async resolve(req: Request, res: Response) {
     try {
-      const { controller, method } = EndpointsRegistry.get(req.pathname);
-      const params = this.getParams(controller);
+      const endpoint = EndpointsRegistry.get(req.pathname);
+      if (!endpoint) {
+        res.send({ message: `${req.pathname} not found`, code: 404 });
+        return;
+      }
 
-      const args: any[] = [];
-      await Promise.all(
-        params.map(
-          async ({
-            type,
-            param: { index, key },
-          }: {
-            type: "body" | "query" | "path" | "req" | "res";
-            param: { index: number; key?: string };
-          }) => {
-            switch (type) {
-              case "body":
-                const body = await req.body;
-                args[index] = key ? body[key] : body;
-                break;
-              case "query":
-                args[index] = key ? req.query[key] : req.query;
-                break;
-              case "path":
-                args[index] = key ? req.params[key] : req.params;
-                break;
-              case "req":
-                args[index] = req;
-                break;
-              case "res":
-                args[index] = res;
-                break;
-              default:
-                throw new Error("Add functionnal error");
-                break;
-            }
-          }
-        )
-      );
+      const { controller, method } = endpoint;
+      // console.log(" ====>> controller <<=====", controller);
+      const params = this.getAllRequestParams(controller, method.name);
 
-      const data = await method(...args);
+      const args = await this.buildMethodArgs(req, res, params);
+      const data = await method.bound(...args);
       res.send(data);
-    } catch (error) {
-      res.send(error, { statusCode: 500 });
+    } catch (error: any) {
+      const isHttpException = error instanceof HttpException;
+      res.send(isHttpException ? error : new InternalServerException(error));
     }
   }
 }

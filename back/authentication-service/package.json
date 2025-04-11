@@ -11,6 +11,7 @@
     "prepare": "npm run build",
     "pretest": "npm run build",
     "posttest": "npm run lint",
+    "predev": "cd ../core && npm run build && cd ../authentication-service",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/main.ts",
     "dev:watch": "tsc --watch & node dist/main.js",
     "prebuild": "rm -rf dist",
