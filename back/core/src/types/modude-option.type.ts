@@ -1,5 +1,5 @@
 export type ModuleOptions = {
-  imports?: any[];
-  providers?: any[];
-  controllers?: any[];
+  imports?: unknown[];
+  providers?: unknown[];
+  controllers?: unknown[];
 };

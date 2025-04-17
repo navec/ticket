@@ -1,10 +1,15 @@
-import {PROVIDER_SCOPE_METADATA, getMetadata, ModulesRegistry} from '..';
+import {
+  PROVIDER_SCOPE_METADATA,
+  getMetadata,
+  ModulesRegistry,
+  Constructor,
+} from '..';
 import {ControllerScanner} from './controller.scanner';
 import {ProviderScanner} from './provider.scanner';
 
 export class ModuleScanner {
-  public static scan(moduleName: any, modules: any[]) {
-    modules.forEach((module: any) => {
+  public static scan(moduleName: string, modules: Constructor[]) {
+    modules.forEach((module: Constructor) => {
       if (!module) {
         const message = `You have may be a ciclic imports in ${moduleName} module`;
         throw new Error(message);

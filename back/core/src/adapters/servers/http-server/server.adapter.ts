@@ -10,7 +10,6 @@ import {
   InternalServerException,
   NotFoundException,
   RequestParamsExtractor,
-  RouterResolver,
   ValidatorType,
   ZodAdapter,
 } from '../../..';
@@ -22,7 +21,6 @@ export class HttpServerAdapter extends ServerAdapter {
 
   constructor() {
     super();
-    const routerResolver = new RouterResolver();
 
     this.server = http.createServer(async (req, res) => {
       const request = new HttpServerRequestAdapter(req);
@@ -98,5 +96,9 @@ export class HttpServerAdapter extends ServerAdapter {
       }
     });
     return this;
+  }
+
+  get serverInstance(): Server {
+    return this.server;
   }
 }

@@ -1,16 +1,19 @@
+type ScoreValue = {
+  method: {bound: Function; name: string};
+  controller: Record<string | symbol, Function>;
+  path: string;
+};
+
 export class EndpointsRegistry {
-  private static store = new Map<
-    string,
-    {method: {bound: any; name: string}; controller: any; path: string}
-  >();
-  private static storeForVariblesPath = new Map<
-    string,
-    {method: {bound: any; name: string}; controller: any; path: string}
-  >();
+  private static store = new Map<string, ScoreValue>();
+  private static storeForVariblesPath = new Map<string, ScoreValue>();
 
   public static register(
     path: string,
-    target: {method: {bound: any; name: string}; controller: any},
+    target: {
+      method: {bound: Function; name: string};
+      controller: Record<string | symbol, Function>;
+    },
   ) {
     const splitPath = path.split('/');
 

@@ -1,11 +1,8 @@
+import {Constructor} from '../types';
 import {ModuleScanner} from './module.scanner';
 
 export class Scanner {
-  public static scanMainModule(module: any) {
-    ModuleScanner.scan(module.name, [module]);
-  }
-
-  public scan(module: any) {
+  public scan(module: Constructor) {
     ModuleScanner.scan(module.name, [module]);
   }
 }

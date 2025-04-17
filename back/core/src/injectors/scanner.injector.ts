@@ -1,4 +1,9 @@
-import {getMetadata, DESIGN_PARAM_TYPES, PROVIDER_SCOPE_METADATA} from '..';
+import {
+  getMetadata,
+  DESIGN_PARAM_TYPES,
+  PROVIDER_SCOPE_METADATA,
+  Constructor,
+} from '..';
 
 export class AutoLoader {
   public static moduleRegistry = new Map();
@@ -6,8 +11,8 @@ export class AutoLoader {
   public static controllersRegistry = new Map();
 
   public static loadProvider(
-    provider: any,
-    acceptedProviders: any[],
+    provider: Constructor,
+    acceptedProviders: Constructor[],
     alreadyLoaded = new Set(),
   ) {
     const metadata = getMetadata(PROVIDER_SCOPE_METADATA, provider);
@@ -28,14 +33,14 @@ export class AutoLoader {
       );
     }
 
-    const params = getMetadata(DESIGN_PARAM_TYPES, provider);
+    const params = getMetadata<Constructor[]>(DESIGN_PARAM_TYPES, provider);
     if (!params) {
       const instance = new provider();
       this.providersRegistry.set(provider, instance);
       return instance;
     }
 
-    const dependencies = params.map((dependency: any) => {
+    const dependencies = params.map(dependency => {
       if (!this.providersRegistry.has(dependency)) {
         const instance = this.loadProvider(dependency, acceptedProviders);
         this.providersRegistry.set(dependency, instance);
@@ -50,8 +55,8 @@ export class AutoLoader {
   }
 
   public static loadController(
-    controller: any,
-    acceptedControllers: any[],
+    controller: Constructor,
+    acceptedControllers: Constructor[],
     alreadyLoaded = new Set(),
   ) {
     const metadata = getMetadata(PROVIDER_SCOPE_METADATA, controller);
@@ -72,14 +77,14 @@ export class AutoLoader {
       );
     }
 
-    const params = getMetadata(DESIGN_PARAM_TYPES, controller);
+    const params = getMetadata<Constructor[]>(DESIGN_PARAM_TYPES, controller);
     if (!params) {
       const instance = new controller();
       this.controllersRegistry.set(controller, instance);
       return instance;
     }
 
-    const dependencies = params.map((dependency: any) => {
+    const dependencies = params.map(dependency => {
       if (!this.providersRegistry.has(dependency)) {
         const instance = this.loadProvider(dependency, acceptedControllers);
         this.providersRegistry.set(dependency, instance);
@@ -94,7 +99,7 @@ export class AutoLoader {
     return instance;
   }
 
-  public static loadModule(target: any, alreadyLoaded = new Set()) {
+  public static loadModule(target: Constructor, alreadyLoaded = new Set()) {
     const metadata = getMetadata(PROVIDER_SCOPE_METADATA, target);
     if (metadata.type !== 'module') {
       const message = `module type is required, currently we have ${metadata.type} type`;
@@ -107,16 +112,16 @@ export class AutoLoader {
 
     alreadyLoaded.add(target);
 
-    (metadata.imports || []).forEach((module: any) => {
+    (metadata.imports || []).forEach((module: Constructor) => {
       this.loadModule(module, alreadyLoaded);
     });
 
     const instance = new target();
-    const providers = metadata.providers || [];
-    const controllers = metadata.controllers || [];
+    const providers: Constructor[] = metadata.providers || [];
+    const controllers: Constructor[] = metadata.controllers || [];
 
-    providers.forEach((p: any) => this.loadProvider(p, providers));
-    controllers.forEach((c: any) => this.loadController(c, controllers));
+    providers.forEach(p => this.loadProvider(p, providers));
+    controllers.forEach(c => this.loadController(c, controllers));
     this.moduleRegistry.set(target, {instance, providers, controllers});
   }
 }

@@ -12,7 +12,13 @@ export class RouterRegistry {
     const controllers = ControllersRegistry.keys();
 
     controllers.forEach(controller => {
-      const controllerInstance = ControllersRegistry.get(controller).instance;
+      const instance = ControllersRegistry.get(controller)?.instance;
+      if (!instance) {
+        // TODO: Add warning log here
+        return;
+      }
+
+      const controllerInstance = instance as Record<string | symbol, Function>;
       const basePath = getMetadata(PATH_METADATA, controller);
       const methods = Reflect.ownKeys(controller.prototype);
 

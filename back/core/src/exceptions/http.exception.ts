@@ -1,4 +1,4 @@
-export class HttpException<T = any> extends Error {
+export class HttpException<T = {}> extends Error {
   public readonly statusCode: number;
   public readonly details?: T;
 

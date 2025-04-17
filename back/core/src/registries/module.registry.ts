@@ -1,11 +1,13 @@
-export class ModulesRegistry {
-  private static store = new Map();
+import {Constructor} from '../types';
 
-  public static register(module: any) {
+export class ModulesRegistry {
+  private static store = new Map<Constructor, {instance: unknown | null}>();
+
+  public static register(module: Constructor) {
     this.store.set(module, {instance: null});
   }
 
-  public static get(module: any) {
+  public static get(module: Constructor) {
     return this.store.get(module);
   }
 }

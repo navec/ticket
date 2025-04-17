@@ -1,11 +1,17 @@
-import {Injector, Scanner, ServerAdapter, RouterRegistry} from '..';
+import {
+  Injector,
+  Scanner,
+  ServerAdapter,
+  RouterRegistry,
+  Constructor,
+} from '..';
 
 export class AppBuilder {
   private scanner: Scanner;
   private injector: Injector;
   private routerRegistry: RouterRegistry;
 
-  private app: {server?: ServerAdapter; module?: unknown};
+  private app: {server?: ServerAdapter; module?: Constructor};
 
   constructor() {
     this.scanner = new Scanner();
@@ -15,7 +21,7 @@ export class AppBuilder {
     this.app = {};
   }
 
-  setModule(module: unknown) {
+  setModule(module: Constructor) {
     this.app.module = module;
     return this;
   }

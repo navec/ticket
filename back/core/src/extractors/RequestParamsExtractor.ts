@@ -1,4 +1,3 @@
-import {EndpointsRegistry} from '../registries';
 import {
   BODY_PARAM_METADATA,
   getMetadata,
@@ -24,7 +23,7 @@ export class RequestParamsExtractor {
     private readonly options: {
       request: Request;
       response: Response;
-      target: any;
+      target: Record<string | symbol, Function>;
       method: string;
     },
   ) {}
@@ -38,7 +37,7 @@ export class RequestParamsExtractor {
     return Object.entries(this.metadataKeyByParamType).flatMap(
       ([type, key]) => {
         const params = getMetadata(key, target, method) || [];
-        return params.map((param: any) => ({type, param}));
+        return params.map((param: unknown) => ({type, param}));
       },
     );
   }
@@ -58,7 +57,12 @@ export class RequestParamsExtractor {
         case ParamType.path:
           return key ? request.path[key] : request.path;
         case ParamType.req:
-          return request.req;
+          return {
+            query: request.query,
+            path: request.path,
+            headers: request.headers,
+            body,
+          };
         case ParamType.res:
           return response;
         default:

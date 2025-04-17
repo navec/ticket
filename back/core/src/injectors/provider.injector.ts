@@ -1,8 +1,13 @@
-import {DESIGN_PARAM_TYPES, getMetadata, ProvidersRegistry} from '..';
+import {
+  Constructor,
+  DESIGN_PARAM_TYPES,
+  getMetadata,
+  ProvidersRegistry,
+} from '..';
 
 export class ProviderInjector {
   static resolve(
-    target: any,
+    target: Constructor,
     acceptedProviders = ProvidersRegistry.keys(),
     alreadyResolved = new Set(),
   ) {
@@ -22,8 +27,9 @@ export class ProviderInjector {
     }
 
     if (!provider.instance) {
-      const dependencies = getMetadata(DESIGN_PARAM_TYPES, target) || [];
-      const injections = dependencies.map((dependency: any) => {
+      const dependencies =
+        getMetadata<Constructor[]>(DESIGN_PARAM_TYPES, target) || [];
+      const injections = dependencies.map(dependency => {
         return this.resolve(dependency, acceptedProviders, alreadyResolved);
       });
       provider.instance = new target(...injections);

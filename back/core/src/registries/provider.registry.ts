@@ -1,15 +1,17 @@
-export class ProvidersRegistry {
-  private static store = new Map();
+import {Constructor} from '..';
 
-  public static register(provider: any) {
+export class ProvidersRegistry {
+  private static store = new Map<Constructor, {instance: unknown | null}>();
+
+  public static register(provider: Constructor) {
     this.store.set(provider, {instance: null});
   }
 
-  public static get(provider: any) {
+  public static get(provider: Constructor) {
     return this.store.get(provider);
   }
 
   public static keys() {
-    return [...this.store.keys()];
+    return Array.from(this.store.keys());
   }
 }

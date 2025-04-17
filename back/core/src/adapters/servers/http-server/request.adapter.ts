@@ -1,6 +1,8 @@
 import {IncomingMessage} from 'node:http';
 import {Request} from '../../abstracts';
 import {EndpointsRegistry} from '../../../registries';
+import {BadRequestException} from '../../../exceptions';
+import {URL} from 'url';
 
 export class HttpServerRequestAdapter extends Request {
   private url: URL;
@@ -14,7 +16,7 @@ export class HttpServerRequestAdapter extends Request {
     return this.url.pathname;
   }
 
-  get body(): Promise<Record<string, any>> {
+  get body(): Promise<Record<string, unknown>> {
     return new Promise((resolve, reject) => {
       let bodyParamsString = '';
       this.request.on('data', chunk => (bodyParamsString += chunk));
@@ -22,18 +24,18 @@ export class HttpServerRequestAdapter extends Request {
       return this.request.on('end', () => {
         try {
           resolve(bodyParamsString.length ? JSON.parse(bodyParamsString) : {});
-        } catch (err: any) {
-          reject(new Error(`Invalid JSON body: ${err.message}`));
+        } catch (error) {
+          reject(new BadRequestException('Invalid JSON body', error));
         }
       });
     });
   }
 
-  get query(): Record<string, any> {
+  get query() {
     return Object.fromEntries(this.url.searchParams.entries()) || {};
   }
 
-  get path(): Record<string, any> {
+  get path() {
     const endpoint = EndpointsRegistry.get(this.url.pathname);
     if (!endpoint) {
       return {};
@@ -51,7 +53,7 @@ export class HttpServerRequestAdapter extends Request {
     return Object.fromEntries(routeVariablesMap.entries());
   }
 
-  get cookies(): Record<string, any> {
+  get cookies(): Record<string, string> {
     throw new Error('Method not implemented.');
   }
 
@@ -68,15 +70,5 @@ export class HttpServerRequestAdapter extends Request {
       },
       {},
     );
-  }
-
-  get req(): {
-    body: Record<string, any>;
-    query: Record<string, any>;
-    path: Record<string, any>;
-    headers: Record<string, string>;
-  } {
-    const {body, query, path, headers} = this;
-    return {body, query, headers, path};
   }
 }

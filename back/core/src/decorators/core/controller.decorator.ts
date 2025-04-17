@@ -6,7 +6,7 @@ import {
 import {Scope} from '../../enums';
 
 export const Controller = (path = '/') => {
-  return (target: any) => {
+  return (target: Function) => {
     const opts = {type: 'controller', scope: Scope.SINGLETON};
     Reflect.defineMetadata(PROVIDER_SCOPE_METADATA, opts, target);
     Reflect.defineMetadata(PATH_METADATA, path, target);

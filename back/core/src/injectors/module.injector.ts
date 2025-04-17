@@ -1,9 +1,14 @@
-import {PROVIDER_SCOPE_METADATA, getMetadata, ModulesRegistry} from '..';
+import {
+  PROVIDER_SCOPE_METADATA,
+  getMetadata,
+  ModulesRegistry,
+  Constructor,
+} from '..';
 import {ControllerInjector} from './controller.injector';
 import {ProviderInjector} from './provider.injector';
 
 export class ModuleInjector {
-  static resolve(target: any) {
+  static resolve(target: Constructor) {
     const module = ModulesRegistry.get(target);
     if (!module) {
       throw new Error(`Module not found for: ${target}`);
@@ -20,12 +25,12 @@ export class ModuleInjector {
       modules.forEach(ModuleInjector.resolve);
 
       const providers = metadata.providers || [];
-      providers.forEach((provider: any) => {
+      providers.forEach((provider: Constructor) => {
         ProviderInjector.resolve(provider, providers);
       });
 
       const controllers = metadata.controllers || [];
-      controllers.forEach((controller: any) => {
+      controllers.forEach((controller: Constructor) => {
         ControllerInjector.resolve(controller, controllers, providers);
       });
 

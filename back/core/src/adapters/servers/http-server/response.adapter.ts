@@ -11,10 +11,16 @@ export class HttpServerResponseAdapter extends Response {
     this.res.setHeader(key, value);
   }
 
-  send(body: HttpException): void {
+  send(body: HttpException | Record<string, unknown>): void {
     this.res.setHeader('Content-Type', 'application/json');
-    this.res.statusCode = body.statusCode;
-    this.res.end(body.toJSONString());
+
+    if (body instanceof HttpException) {
+      this.res.statusCode = body.statusCode;
+      this.res.end(body.toJSONString());
+    } else {
+      // TODO: Should return a good status code
+      this.res.end(JSON.stringify(body));
+    }
   }
 
   get finished(): boolean {

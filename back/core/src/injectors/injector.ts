@@ -1,11 +1,8 @@
-import {ModulesRegistry} from '../registries';
+import {Constructor} from '..';
 import {ModuleInjector} from './module.injector';
 
 export class Injector {
-  static resolveMainModule(module: any) {
-    ModuleInjector.resolve(module);
-  }
-  inject(module: any) {
+  inject(module: Constructor) {
     ModuleInjector.resolve(module);
   }
 }

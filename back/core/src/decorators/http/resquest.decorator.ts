@@ -3,7 +3,7 @@ import {HttpMethod} from '../../enums';
 
 const createHttpRequest = (httpMethod: HttpMethod, path = '/') => {
   return function (
-    _: any,
+    _: unknown,
     __: string,
     descriptor: PropertyDescriptor,
   ): PropertyDescriptor {
