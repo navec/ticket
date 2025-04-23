@@ -11,7 +11,7 @@ export class ModuleInjector {
   static resolve(target: Constructor) {
     const module = ModulesRegistry.get(target);
     if (!module) {
-      throw new Error(`Module not found for: ${target}`);
+      throw new Error(`Module not found for: ${target.name}`);
     }
 
     if (!module.instance) {

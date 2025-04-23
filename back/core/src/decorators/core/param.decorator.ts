@@ -24,12 +24,8 @@ const createParam =
     value.push({key: name, index: parameterIndex});
     Reflect.defineMetadata(key, value, target, propertyKey);
 
-    const paramTypes = Reflect.getMetadata(
-      DESIGN_PARAM_TYPES,
-      target,
-      propertyKey,
-    );
-
+    const paramTypes =
+      Reflect.getMetadata(DESIGN_PARAM_TYPES, target, propertyKey) || [];
     const dtoSchema = paramTypes[parameterIndex];
     if (dtoSchema?.prototype?.__isDTO) {
       const dtos =

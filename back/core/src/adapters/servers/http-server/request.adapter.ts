@@ -32,7 +32,7 @@ export class HttpServerRequestAdapter extends Request {
   }
 
   get query() {
-    return Object.fromEntries(this.url.searchParams.entries()) || {};
+    return Object.fromEntries(this.url.searchParams.entries());
   }
 
   get path() {

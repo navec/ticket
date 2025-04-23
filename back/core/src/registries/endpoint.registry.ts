@@ -1,4 +1,4 @@
-type ScoreValue = {
+export type ScoreValue = {
   method: {bound: Function; name: string};
   controller: Record<string | symbol, Function>;
   path: string;

@@ -3,8 +3,11 @@ import {Constructor} from '..';
 export class ProvidersRegistry {
   private static store = new Map<Constructor, {instance: unknown | null}>();
 
-  public static register(provider: Constructor) {
-    this.store.set(provider, {instance: null});
+  public static register(
+    provider: Constructor,
+    instance: unknown | null = null,
+  ) {
+    this.store.set(provider, {instance});
   }
 
   public static get(provider: Constructor) {

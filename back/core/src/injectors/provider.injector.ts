@@ -2,6 +2,8 @@ import {
   Constructor,
   DESIGN_PARAM_TYPES,
   getMetadata,
+  InternalServerException,
+  NotFoundException,
   ProvidersRegistry,
 } from '..';
 
@@ -11,19 +13,21 @@ export class ProviderInjector {
     acceptedProviders = ProvidersRegistry.keys(),
     alreadyResolved = new Set(),
   ) {
-    // Vérifie que le provider a bien été scanné
     if (!acceptedProviders.includes(target)) {
-      throw new Error();
+      throw new InternalServerException(
+        `Target ${target.name} is not in the list of accepted providers.`,
+      );
     }
 
-    // Vérifie les dependances cyclique
     if (alreadyResolved.has(target)) {
-      throw new Error();
+      throw new InternalServerException(
+        `Circular dependency detected while resolving ${target.name}.`,
+      );
     }
 
     const provider = ProvidersRegistry.get(target);
     if (!provider) {
-      throw new Error(`Provider not found for: ${target}`);
+      throw new NotFoundException(`Provider not found for: ${target}`);
     }
 
     if (!provider.instance) {

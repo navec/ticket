@@ -9,20 +9,17 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
-    "test": "vitest",
-    "test:watch": "vitest watch",
-    "test:coverage": "vitest run --coverage",
-    "prepare": "npm run clean && npm run build"
+    "prepare": "npm run clean && npm run build",
+    "test": "cd .. && npm run test core/",
+    "test:watch": "cd .. && npm run test:watch core/",
+    "test:coverage": "cd .. && npm run test:coverage core/"
   },
   "engines": {
     "node": ">=20.x"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
-    "@vitest/coverage-v8": "^3.1.1",
-    "@vitest/ui": "^3.1.1",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.1"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "reflect-metadata": "^0.2.2",

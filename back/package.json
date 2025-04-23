@@ -15,7 +15,9 @@
     "lint": "gts lint",
     "lint:fix": "gts fix",
     "clean": "gts clean",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
   },
   "engines": {
     "node": ">=20.x"
@@ -27,6 +29,9 @@
     "@eslint/js": "^9.24.0",
     "eslint": "^8.57.1",
     "globals": "^16.0.0",
-    "typescript-eslint": "^8.29.1"
+    "typescript-eslint": "^8.29.1",
+    "@vitest/coverage-v8": "^3.1.1",
+    "@vitest/ui": "^3.1.1",
+    "vitest": "^3.1.1"
   }
 }

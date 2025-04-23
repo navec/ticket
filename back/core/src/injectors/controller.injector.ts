@@ -2,6 +2,8 @@ import {
   Constructor,
   ControllersRegistry,
   DESIGN_PARAM_TYPES,
+  InternalServerException,
+  NotFoundException,
   ProvidersRegistry,
   getMetadata,
 } from '..';
@@ -13,14 +15,13 @@ export class ControllerInjector {
     acceptedControllers = ControllersRegistry.keys(),
     acceptedProviders = ProvidersRegistry.keys(),
   ) {
-    // Vérifie que le provider a bien été scanné
     if (!acceptedControllers.includes(target)) {
-      throw new Error();
+      throw new InternalServerException();
     }
 
     const controller = ControllersRegistry.get(target);
     if (!controller) {
-      throw new Error(`Controller not found for: ${target}`);
+      throw new NotFoundException(`Controller not found for: ${target.name}`);
     }
 
     if (!controller.instance) {

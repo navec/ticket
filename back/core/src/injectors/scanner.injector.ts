@@ -3,6 +3,7 @@ import {
   DESIGN_PARAM_TYPES,
   PROVIDER_SCOPE_METADATA,
   Constructor,
+  InternalServerException,
 } from '..';
 
 export class AutoLoader {
@@ -17,18 +18,19 @@ export class AutoLoader {
   ) {
     const metadata = getMetadata(PROVIDER_SCOPE_METADATA, provider);
     if (metadata.type !== 'provider') {
-      const message = `provider type is required, currently we have ${metadata.type} type`;
-      throw new Error(message);
+      throw new InternalServerException(
+        `provider type is required, currently we have ${metadata.type} type`,
+      );
     }
 
     if (!acceptedProviders.includes(provider)) {
-      throw new Error(
+      throw new InternalServerException(
         `${provider.name} is not accepted. Here is accepted provider list [ ${acceptedProviders.map(({name}) => name).join(', ')} ].`,
       );
     }
 
     if (alreadyLoaded.has(provider)) {
-      throw new Error(
+      throw new InternalServerException(
         `We have a cyclic dependency with ${provider.name} provider`,
       );
     }
@@ -62,17 +64,17 @@ export class AutoLoader {
     const metadata = getMetadata(PROVIDER_SCOPE_METADATA, controller);
     if (metadata.type !== 'controller') {
       const message = `controller type is required, currently we have ${metadata.type} type`;
-      throw new Error(message);
+      throw new InternalServerException(message);
     }
 
     if (!acceptedControllers.includes(controller)) {
-      throw new Error(
+      throw new InternalServerException(
         `${controller.name} is not accepted. Here is accepted controller list [ ${acceptedControllers.map(({name}) => name).join(', ')} ].`,
       );
     }
 
     if (alreadyLoaded.has(controller)) {
-      throw new Error(
+      throw new InternalServerException(
         `We have a cyclic dependency with ${controller.name} controller`,
       );
     }
@@ -103,11 +105,13 @@ export class AutoLoader {
     const metadata = getMetadata(PROVIDER_SCOPE_METADATA, target);
     if (metadata.type !== 'module') {
       const message = `module type is required, currently we have ${metadata.type} type`;
-      throw new Error(message);
+      throw new InternalServerException(message);
     }
 
     if (alreadyLoaded.has(target)) {
-      throw new Error(`We have a cyclic dependency with ${target.name} module`);
+      throw new InternalServerException(
+        `We have a cyclic dependency with ${target.name} module`,
+      );
     }
 
     alreadyLoaded.add(target);
