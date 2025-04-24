@@ -1,0 +1,38 @@
+{
+	"name": "authentication-service",
+	"version": "1.0.0",
+	"description": "",
+	"main": "dist/main.js",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"scripts": {
+		"lint": "eslint . --fix --max-warnings=0  --ignore-path ../.eslintignore",
+		"format": "prettier . --write",
+		"predev": "cd ../core && npm run build && cd ../authentication-service",
+		"dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/main.ts",
+		"dev:watch": "tsc --watch & node dist/main.js",
+		"prebuild": "rm -rf dist",
+		"build": "tsc",
+		"start": "npm run build && node -r module-alias/register dist/main.js"
+	},
+	"devDependencies": {
+		"@types/express": "^5.0.0",
+		"@types/node": "20.12.7",
+		"ts-node": "^10.9.2",
+		"tsconfig-paths": "^4.2.0",
+		"typescript": "^5.4.3"
+	},
+	"dependencies": {
+		"core": "file:../core",
+		"express": "^4.21.1",
+		"module-alias": "^2.2.3",
+		"reflect-metadata": "^0.2.2"
+	},
+	"_moduleAliases": {
+		"@business": "dist/business",
+		"@presentation": "dist/presentation",
+		"@infrastructure": "dist/infrastructure",
+		"@use-cases": "dist/use-cases"
+	}
+}
