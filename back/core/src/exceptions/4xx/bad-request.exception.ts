@@ -1,8 +1,8 @@
-import {HTTP_STATUS} from '../../constants/http-status.constant';
-import {HttpException} from '../http.exception';
+import { HTTP_STATUS } from '../../constants/http-status.constant';
+import { HttpException } from '../http.exception';
 
-export class BadRequestException<T = {}> extends HttpException<T> {
-  constructor(message = 'Bad Request', details?: T) {
-    super(HTTP_STATUS.BAD_REQUEST, message, details);
-  }
+export class BadRequestException<T = object> extends HttpException<T> {
+	constructor(message = 'Bad Request', details?: T) {
+		super(HTTP_STATUS.BAD_REQUEST, message, details);
+	}
 }

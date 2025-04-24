@@ -1,3 +1,3 @@
 export type UserProfile = {
-  email: string;
+	email: string;
 };

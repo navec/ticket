@@ -1,0 +1,4 @@
+{
+	"root": false, // Très important ! Sinon ça bloque la cascade
+	"extends": ["../.eslintrc"]
+}

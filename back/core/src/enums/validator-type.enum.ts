@@ -1,3 +1,3 @@
 export enum ValidatorType {
-  ZOD = 'ZOD',
+	ZOD = 'ZOD',
 }

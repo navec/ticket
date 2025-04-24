@@ -1,39 +1,41 @@
 {
-  "name": "back",
-  "version": "1.0.0",
-  "description": "TODO",
-  "private": true,
-  "workspaces": [
-    "core",
-    "authentication-service",
-    "user-service"
-  ],
-  "keywords": [],
-  "author": "Navec Gael Batchi",
-  "license": "ISC",
-  "scripts": {
-    "lint": "gts lint",
-    "lint:fix": "gts fix",
-    "clean": "gts clean",
-    "test": "vitest",
-    "test:watch": "vitest watch",
-    "test:coverage": "vitest run --coverage",
-    "prepare": "husky"
-  },
-  "engines": {
-    "node": ">=20.x"
-  },
-  "dependencies": {
-    "gts": "^6.0.2"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.24.0",
-    "@vitest/coverage-v8": "^3.1.1",
-    "@vitest/ui": "^3.1.1",
-    "eslint": "^8.57.1",
-    "globals": "^16.0.0",
-    "husky": "^9.1.7",
-    "typescript-eslint": "^8.29.1",
-    "vitest": "^3.1.1"
-  }
+	"name": "back",
+	"version": "1.0.0",
+	"description": "TODO",
+	"private": true,
+	"workspaces": [
+		"core",
+		"authentication-service",
+		"user-service"
+	],
+	"keywords": [],
+	"author": "Navec Gael Batchi",
+	"license": "ISC",
+	"scripts": {
+		"lint": "eslint . --fix --max-warnings=0",
+		"lint:core": "npm run lint --workspace core",
+		"format": "prettier . --write",
+		"test": "vitest",
+		"test:watch": "vitest watch",
+		"test:coverage": "vitest run --coverage",
+		"prepare": "husky"
+	},
+	"engines": {
+		"node": ">=20.x"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.25.1",
+		"@typescript-eslint/eslint-plugin": "^8.31.0",
+		"@vitest/coverage-v8": "^3.1.1",
+		"@vitest/ui": "^3.1.1",
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^10.1.2",
+		"eslint-plugin-prettier": "^5.2.6",
+		"globals": "^16.0.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.5.1",
+		"prettier": "3.5.3",
+		"typescript-eslint": "^8.31.0",
+		"vitest": "^3.1.1"
+	}
 }

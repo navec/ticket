@@ -1,5 +1,5 @@
 export enum Scope {
-  /**
+	/**
    * The singleton scope will return the same instance, which is cached.
    * This scope is the default if no other scope is specified.
    *
@@ -10,9 +10,9 @@ export enum Scope {
    *    private name: string;
    *  }
    */
-  SINGLETON = 'singleton',
+	SINGLETON = 'singleton',
 
-  /**
+	/**
    * The prototype scope will a different instance every time it is requested.
    *
    * @example
@@ -22,9 +22,9 @@ export enum Scope {
    *    private name: string;
    *  }
    */
-  PROTOTYPE = 'prototype',
+	PROTOTYPE = 'prototype',
 
-  /**
+	/**
    * The request scope, we can define the request scope.
    *
    * @example
@@ -34,5 +34,5 @@ export enum Scope {
    *    private name: string;
    *  }
    */
-  REQUEST = 'request',
+	REQUEST = 'request',
 }

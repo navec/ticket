@@ -1,33 +1,33 @@
-import {describe, it, expect} from 'vitest';
-import {NotImplementedException} from '..';
-import {HTTP_STATUS} from '../../../constants';
+import { describe, it, expect } from 'vitest';
+import { NotImplementedException } from '..';
+import { HTTP_STATUS } from '../../../constants';
 
 describe(NotImplementedException.name, () => {
-  it('should create an instance with default message and status code', () => {
-    const exception = new NotImplementedException();
+	it('should create an instance with default message and status code', () => {
+		const exception = new NotImplementedException();
 
-    expect(exception.statusCode).toBe(HTTP_STATUS.NOT_IMPLEMENTED);
-    expect(exception.message).toBe('Not Implemented');
-    expect(exception.details).toBeUndefined();
-  });
+		expect(exception.statusCode).toBe(HTTP_STATUS.NOT_IMPLEMENTED);
+		expect(exception.message).toBe('Not Implemented');
+		expect(exception.details).toBeUndefined();
+	});
 
-  it('should create an instance with a custom message', () => {
-    const customMessage = 'Custom Not Implemented Message';
+	it('should create an instance with a custom message', () => {
+		const customMessage = 'Custom Not Implemented Message';
 
-    const exception = new NotImplementedException(customMessage);
+		const exception = new NotImplementedException(customMessage);
 
-    expect(exception.statusCode).toBe(HTTP_STATUS.NOT_IMPLEMENTED);
-    expect(exception.message).toBe(customMessage);
-    expect(exception.details).toBeUndefined();
-  });
+		expect(exception.statusCode).toBe(HTTP_STATUS.NOT_IMPLEMENTED);
+		expect(exception.message).toBe(customMessage);
+		expect(exception.details).toBeUndefined();
+	});
 
-  it('should create an instance with custom details', () => {
-    const details = {field: 'email', error: 'Custom error'};
+	it('should create an instance with custom details', () => {
+		const details = { field: 'email', error: 'Custom error' };
 
-    const exception = new NotImplementedException('Custom error', details);
+		const exception = new NotImplementedException('Custom error', details);
 
-    expect(exception.statusCode).toBe(HTTP_STATUS.NOT_IMPLEMENTED);
-    expect(exception.message).toBe('Custom error');
-    expect(exception.details).toEqual(details);
-  });
+		expect(exception.statusCode).toBe(HTTP_STATUS.NOT_IMPLEMENTED);
+		expect(exception.message).toBe('Custom error');
+		expect(exception.details).toEqual(details);
+	});
 });
