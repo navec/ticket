@@ -7,6 +7,12 @@ export default defineConfig({
 		exclude: ['**/node_modules/**', '**/dist/**'],
 		environment: 'node',
 		coverage: {
+			thresholds: {
+				lines: 80,
+				functions: 80,
+				branches: 80,
+				statements: 80,
+			},
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
 			exclude: [
