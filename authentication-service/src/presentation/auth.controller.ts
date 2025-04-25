@@ -1,7 +1,8 @@
-import { BodyParam, Controller, Post } from 'core';
-import { RegisterUserUseCase } from '../use-cases/register-user.use-case';
-import { LoginUserUseCase } from '../use-cases/login-user.use-case';
-import { LoginUserDto } from '../use-cases/dtos/login-user.dto';
+import { BodyParam, Controller, Post } from '@core/decorators';
+
+import { RegisterUserUseCase } from '@use-cases/register-user.use-case';
+import { LoginUserUseCase } from '@use-cases/login-user.use-case';
+import { LoginUserDto } from '@use-cases/dtos/login-user.dto';
 import { CreateUserDto } from '@use-cases/dtos/create-user.dto';
 
 @Controller('auth')
