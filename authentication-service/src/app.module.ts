@@ -1,4 +1,4 @@
-import { Module } from 'core';
+import { Module } from '@core/decorators';
 
 import { AuthController } from './presentation';
 import { RegisterUserUseCase } from './use-cases/register-user.use-case';

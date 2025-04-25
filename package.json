@@ -6,12 +6,17 @@
 	"workspaces": [
 		"core",
 		"authentication-service",
-		"user-service"
+		"user-service",
+		"auth-service"
 	],
 	"keywords": [],
 	"author": "Navec Gael Batchi",
 	"license": "ISC",
 	"scripts": {
+		"build:core": "npm run build --workspace core",
+		"build:auth": "npm run build --workspace auth-service",
+		"build:authentication": "npm run build --workspace authentication-service",
+		"build": "npm run build --workspaces --if-present",
 		"lint": "eslint . --fix --max-warnings=0",
 		"lint:core": "npm run lint --workspace core",
 		"format": "prettier . --write",
@@ -25,6 +30,8 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.25.1",
+		"@swc/core": "^1.11.22",
+		"@types/node": "^22.15.2",
 		"@typescript-eslint/eslint-plugin": "^8.31.0",
 		"@vitest/coverage-v8": "^3.1.1",
 		"@vitest/ui": "^3.1.1",
@@ -35,6 +42,10 @@
 		"husky": "^9.1.7",
 		"lint-staged": "^15.5.1",
 		"prettier": "3.5.3",
+		"ts-node": "^10.9.2",
+		"tsconfig-paths": "^4.2.0",
+		"tsup": "^8.4.0",
+		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.31.0",
 		"vitest": "^3.1.1"
 	}
