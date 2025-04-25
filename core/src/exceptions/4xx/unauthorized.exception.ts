@@ -1,5 +1,5 @@
-import { HTTP_STATUS } from '../../constants/http-status.constant';
-import { HttpException } from '../http.exception';
+import { HTTP_STATUS } from '@core/constants';
+import { HttpException } from '@core/exceptions/http.exception';
 
 export class UnauthorizedException<T = object> extends HttpException<T> {
 	constructor(message = 'Unauthorized', details?: T) {

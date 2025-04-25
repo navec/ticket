@@ -1,9 +1,8 @@
-import {
-	PROVIDER_SCOPE_METADATA,
-	getMetadata,
-	ModulesRegistry,
-	Constructor,
-} from '..';
+import { Constructor } from '@core/types';
+import { ModulesRegistry } from '@core/registries';
+import { getMetadata } from '@core/decorators';
+import { PROVIDER_SCOPE_METADATA } from '@core/constants';
+
 import { ControllerInjector } from './controller.injector';
 import { ProviderInjector } from './provider.injector';
 

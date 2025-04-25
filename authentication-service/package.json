@@ -14,17 +14,6 @@
 		"dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/main.ts",
 		"start": "ts-node --project ./tsconfig.json -r tsconfig-paths/register dist/main.js"
 	},
-	"devDependencies": {
-		"@types/express": "^5.0.0",
-		"@types/node": "20.12.7",
-		"ts-node": "^10.9.2",
-		"tsconfig-paths": "^4.2.0",
-		"typescript": "^5.4.3"
-	},
-	"dependencies": {
-		"core": "file:../core",
-		"express": "^4.21.1",
-		"module-alias": "^2.2.3",
-		"reflect-metadata": "^0.2.2"
-	}
+	"devDependencies": {},
+	"dependencies": {}
 }

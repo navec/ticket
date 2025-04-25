@@ -6,8 +6,8 @@ import {
 	RES_PARAM_METADATA,
 	SCHEMA_PARAM_METADATA,
 	DESIGN_PARAM_TYPES,
-} from '../../constants';
-import { getMetadata } from '../utils';
+} from '@core/constants';
+import { getMetadata } from '@core/decorators';
 
 const createParam =
 	(type: string, key: string, name?: string) =>

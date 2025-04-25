@@ -1,5 +1,5 @@
-import { METHOD_METADATA, PATH_METADATA } from '../../constants';
-import { HttpMethod } from '../../enums';
+import { METHOD_METADATA, PATH_METADATA } from '@core/constants';
+import { HttpMethod } from '@core/enums';
 
 const createHttpRequest = (httpMethod: HttpMethod, path = '/') => {
 	return function (

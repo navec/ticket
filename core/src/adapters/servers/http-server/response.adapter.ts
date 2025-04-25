@@ -1,6 +1,6 @@
 import { ServerResponse } from 'node:http';
-import { Response } from '../../abstracts';
-import { HttpException } from '../../../exceptions';
+import { Response } from '@core/adapters';
+import { HttpException } from '@core/exceptions';
 
 export class HttpServerResponseAdapter extends Response {
 	constructor(private res: ServerResponse) {

@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { ValidatorAdapter } from '../abstracts/validator.adapter';
-import { BadRequestException } from '../../exceptions';
+import { BadRequestException } from '@core/exceptions';
+import { ValidatorAdapter } from '@core/adapters';
 
 export class ZodAdapter extends ValidatorAdapter {
 	async validate(schemas: z.ZodSchema[], data: unknown[]) {

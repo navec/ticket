@@ -1,11 +1,8 @@
-import {
-	Constructor,
-	DESIGN_PARAM_TYPES,
-	getMetadata,
-	InternalServerException,
-	NotFoundException,
-	ProvidersRegistry,
-} from '..';
+import { DESIGN_PARAM_TYPES } from '@core/constants';
+import { getMetadata } from '@core/decorators';
+import { InternalServerException, NotFoundException } from '@core/exceptions';
+import { ProvidersRegistry } from '@core/registries';
+import { Constructor } from '@core/types';
 
 export class ProviderInjector {
 	static resolve(

@@ -1,4 +1,4 @@
-import { Constructor } from '../types';
+import { Constructor } from '@core/types';
 import { ModuleScanner } from './module.scanner';
 
 export class Scanner {

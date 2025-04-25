@@ -1,5 +1,5 @@
-import { INJECTABLE_METADATA, PROVIDER_SCOPE_METADATA } from '../../constants';
-import { Scope } from '../../enums';
+import { INJECTABLE_METADATA, PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { Scope } from '@core/enums';
 
 export const Injectable = () => {
 	return (target: object) => {

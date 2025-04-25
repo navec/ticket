@@ -1,4 +1,7 @@
-import { Constructor, ServerAdapter, ServerType } from '..';
+import { ServerType } from '@core/enums';
+import { ServerAdapter } from '@core/adapters';
+import { Constructor } from '@core/types';
+
 import { AppBuilder } from './app.builder';
 import { SERVER_TYPE_ADAPTER_REGISTRY } from './app.constants';
 

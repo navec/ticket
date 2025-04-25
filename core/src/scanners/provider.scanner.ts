@@ -1,9 +1,7 @@
-import {
-	PROVIDER_SCOPE_METADATA,
-	getMetadata,
-	ProvidersRegistry,
-	Constructor,
-} from '..';
+import { PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { getMetadata } from '@core/decorators';
+import { ProvidersRegistry } from '@core/registries';
+import { Constructor } from '@core/types';
 
 export class ProviderScanner {
 	public static scan(providers: Constructor[]) {
