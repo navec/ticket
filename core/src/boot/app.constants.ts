@@ -1,6 +1,5 @@
-import { HttpServerAdapter, ZodAdapter } from '../adapters';
-import { ServerType } from '../enums';
-import { ValidatorType } from '../enums/validator-type.enum';
+import { HttpServerAdapter, ZodAdapter } from '@core/adapters';
+import { ServerType, ValidatorType } from '@core/enums';
 
 export const SERVER_TYPE_ADAPTER_REGISTRY = {
 	[ServerType.HTTP_SERVER]: HttpServerAdapter,

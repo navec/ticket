@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { ForbiddenException } from '..';
-import { HTTP_STATUS } from '../../../constants';
+import { ForbiddenException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(ForbiddenException.name, () => {
 	it('should create an instance with default message and status code', () => {

@@ -1,5 +1,5 @@
+import { DtoSchema } from '@core/decorators';
 import { describe, it, expect } from 'vitest';
-import { DtoSchema } from '../schema.decorator';
 
 describe('DtoSchema Decorator', () => {
 	it('should add __isDTO property to the target prototype', () => {

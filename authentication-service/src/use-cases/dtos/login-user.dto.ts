@@ -1,4 +1,5 @@
-import { DtoSchema } from 'core';
+import { DtoSchema } from 'core/decorators';
+
 import { z } from 'zod';
 
 const LoginUserSchema = z.object({

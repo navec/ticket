@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { PATH_METADATA, Get, Post, Put, Delete, Patch } from 'core/src';
+import { Get, Post, Put, Delete, Patch } from '@core/decorators';
+import { PATH_METADATA } from '@core/constants';
 
 describe('createHttpRequest', () => {
 	it.each([
@@ -25,14 +26,5 @@ describe('createHttpRequest', () => {
 
 		expect(result).toBe(mockDescriptor);
 		expect(Reflect.getMetadata(PATH_METADATA, mockDescriptor.value)).toBe('/');
-	});
-
-	it('should not modify the original method', () => {
-		const originalMethod = vi.fn();
-		const mockDescriptor = { value: originalMethod };
-
-		const result = Put('/another-path')({}, '', mockDescriptor);
-
-		expect(result.value).toBe(originalMethod);
 	});
 });

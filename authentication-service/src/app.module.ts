@@ -1,10 +1,10 @@
-import { Module } from 'core';
+import { Module } from 'core/decorators';
 
-import { AuthController } from './presentation';
-import { RegisterUserUseCase } from './use-cases/register-user.use-case';
-import { LoginUserUseCase } from './use-cases/login-user.use-case';
-import { AuthService } from './business/auth.service';
-import { AuthRepositoryInMemory } from './infrastructure/auth.repository';
+import { RegisterUserUseCase } from '@use-cases/register-user.use-case';
+import { LoginUserUseCase } from '@use-cases/login-user.use-case';
+import { AuthService } from '@business/auth.service';
+import { AuthRepositoryInMemory } from '@infrastructure/auth.repository';
+import { AuthController } from '@presentation/auth.controller';
 
 // TODO Create Auth module
 @Module({

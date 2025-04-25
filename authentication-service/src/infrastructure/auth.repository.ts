@@ -1,7 +1,8 @@
-import { Injectable } from 'core';
-import { AuthRepository } from '../business/interfaces/user.repository';
-import { UserLogin } from '../business/entities/user-login.entity';
-import { UserProfile } from '../business/entities/user-profile.entity';
+import { Injectable } from 'core/decorators';
+
+import { AuthRepository } from '@business/interfaces/user.repository';
+import { UserLogin } from '@business/entities/user-login.entity';
+import { UserProfile } from '@business/entities/user-profile.entity';
 
 @Injectable()
 export class AuthRepositoryInMemory implements AuthRepository {

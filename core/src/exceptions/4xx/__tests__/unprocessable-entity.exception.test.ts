@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { UnprocessableEntityException } from '..';
-import { HTTP_STATUS } from '../../../constants';
+import { UnprocessableEntityException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(UnprocessableEntityException.name, () => {
 	it('should create an instance with default message and status code', () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
-import { HttpServerResponseAdapter } from '../response.adapter';
+import { HttpServerResponseAdapter } from '@core/adapters/servers/http-server/response.adapter';
 import { ServerResponse } from 'node:http';
-import { HttpException } from 'core/src/exceptions';
+import { HttpException } from '@core/exceptions';
 
 describe(HttpServerResponseAdapter.name, () => {
 	it('should set a header on the response', () => {

@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { RequestParamsExtractor } from '../RequestParamsExtractor';
-import { Request, Response, ParamType } from 'core/src';
-import * as Utils from 'core/src/decorators/utils';
+import { RequestParamsExtractor } from '@core/extractors';
+import { Request, Response } from '@core/adapters/abstracts';
+import { ParamType } from '@core/enums';
+import * as Utils from '@core/decorators';
 
 vi.mock('core/src/decorators/utils', async () => {
 	const actual = await vi.importActual('core/src/decorators/utils');

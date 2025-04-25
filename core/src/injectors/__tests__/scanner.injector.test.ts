@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, Mock } from 'vitest';
-import { AutoLoader } from '../scanner.injector';
-import { getMetadata } from 'core/src';
+import { AutoLoader } from '@core/injectors';
+import { getMetadata } from '@core/decorators';
 
-vi.mock('..', () => ({ getMetadata: vi.fn() }));
+vi.mock('@core/decorators', () => ({ getMetadata: vi.fn() }));
 
 describe('AutoLoader', () => {
 	const MockProvider = class MockProvider {};

@@ -1,7 +1,7 @@
 import { IncomingMessage } from 'node:http';
-import { Request } from '../../abstracts';
-import { EndpointsRegistry } from '../../../registries';
-import { BadRequestException } from '../../../exceptions';
+import { Request } from '@core/adapters/abstracts';
+import { EndpointsRegistry } from '@core/registries';
+import { BadRequestException } from '@core/exceptions';
 import { URL } from 'url';
 
 export class HttpServerRequestAdapter extends Request {

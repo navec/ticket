@@ -1,11 +1,9 @@
-import {
-	PROVIDER_SCOPE_METADATA,
-	getMetadata,
-	ModulesRegistry,
-	Constructor,
-} from '..';
+import { Constructor } from '@core/types';
 import { ControllerScanner } from './controller.scanner';
 import { ProviderScanner } from './provider.scanner';
+import { PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { getMetadata } from '@core/decorators';
+import { ModulesRegistry } from '@core/registries';
 
 export class ModuleScanner {
 	public static scan(moduleName: string, modules: Constructor[]) {

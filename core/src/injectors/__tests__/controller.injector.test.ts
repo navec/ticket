@@ -1,11 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
-import { ControllerInjector } from '../controller.injector';
-import { ControllersRegistry, ProvidersRegistry } from 'core/src';
-import { ProviderInjector } from '../provider.injector';
-import * as Utils from 'core/src/decorators/utils';
+import { ControllerInjector, ProviderInjector } from '@core/injectors';
+import * as Utils from '@core/decorators/utils';
+import { ControllersRegistry, ProvidersRegistry } from '@core/registries';
 
-vi.mock('core/src/decorators/utils', async () => {
-	const actual = await vi.importActual('core/src/decorators/utils');
+vi.mock('@core/decorators/utils', async () => {
+	const actual = await vi.importActual('@core/decorators/utils');
 	return { ...actual, getMetadata: vi.fn() };
 });
 

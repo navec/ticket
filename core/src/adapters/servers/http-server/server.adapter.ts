@@ -1,19 +1,17 @@
 import http, { Server } from 'node:http';
-import { ServerAdapter } from '../../abstracts';
+import { ServerAdapter, ZodAdapter } from '@core/adapters';
 import { HttpServerRequestAdapter } from './request.adapter';
 import { HttpServerResponseAdapter } from './response.adapter';
+import { ValidatorAdapter } from '@core/adapters/abstracts/validator.adapter';
+import { EndpointsRegistry } from '@core/registries';
 import {
 	BadRequestException,
-	DtoExtractor,
-	EndpointsRegistry,
 	HttpException,
 	InternalServerException,
 	NotFoundException,
-	RequestParamsExtractor,
-	ValidatorType,
-	ZodAdapter,
-} from '../../..';
-import { ValidatorAdapter } from '../../abstracts/validator.adapter';
+} from '@core/exceptions';
+import { DtoExtractor, RequestParamsExtractor } from '@core/extractors';
+import { ValidatorType } from '@core/enums';
 
 export class HttpServerAdapter extends ServerAdapter {
 	private server: Server;

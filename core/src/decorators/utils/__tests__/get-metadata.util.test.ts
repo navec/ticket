@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { describe, it, expect, vi } from 'vitest';
-import { getMetadata } from '../get-metadata.util';
+import { getMetadata } from '@core/decorators';
 
 describe('getMetadata', () => {
 	it('should return metadata for a class', () => {

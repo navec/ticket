@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { ProvidersRegistry } from '../provider.registry';
+import { ProvidersRegistry } from '@core/registries';
 
 describe('ProvidersRegistry', () => {
 	const TestProvider = class TestProvider {};

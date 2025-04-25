@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ModulesRegistry } from '../module.registry';
+import { ModulesRegistry } from '@core/registries';
 
 describe('ModulesRegistry', () => {
 	const TestModule = class TestModule {};

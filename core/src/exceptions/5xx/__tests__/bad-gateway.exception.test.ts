@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { BadGatewayException } from '..';
-import { HTTP_STATUS } from '../../../constants';
+import { BadGatewayException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(BadGatewayException.name, () => {
 	it('should create an instance with default message and status code', () => {

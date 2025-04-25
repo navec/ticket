@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
+import { Constructor } from '@core/types';
+import { ProvidersRegistry } from '@core/registries';
 import { ProviderInjector } from '../provider.injector';
-import { Constructor, ProvidersRegistry } from 'core/src';
 
 describe('ProviderInjector', () => {
 	const TestDependency: Constructor = class TestDependency {};

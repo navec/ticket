@@ -1,12 +1,8 @@
-import {
-	getMetadata,
-	HttpMethod,
-	EndpointsRegistry,
-	ControllersRegistry,
-	METHOD_METADATA,
-	PATH_METADATA,
-	UnknownFunction,
-} from '..';
+import { METHOD_METADATA, PATH_METADATA } from '@core/constants';
+import { getMetadata } from '@core/decorators';
+import { HttpMethod } from '@core/enums';
+import { ControllersRegistry, EndpointsRegistry } from '@core/registries';
+import { UnknownFunction } from '@core/types';
 
 export class RouterRegistry {
 	public register() {

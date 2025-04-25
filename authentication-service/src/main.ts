@@ -1,5 +1,9 @@
+import 'reflect-metadata';
+import 'tsconfig-paths/register';
+
 import { AppModule } from './app.module';
-import { AppBootFactory, ValidatorType } from 'core';
+import { AppBootFactory } from 'core/boot';
+import { ValidatorType } from 'core/enums';
 
 const port = 3000;
 const hostname = 'localhost';

@@ -1,6 +1,8 @@
-import { Constructor, ServerAdapter, ServerType } from '..';
+import { ServerAdapter } from '@core/adapters';
 import { AppBuilder } from './app.builder';
 import { SERVER_TYPE_ADAPTER_REGISTRY } from './app.constants';
+import { ServerType } from '@core/enums';
+import { Constructor } from '@core/types';
 
 class AppFactory {
 	getServer(type = ServerType.HTTP_SERVER): ServerAdapter {

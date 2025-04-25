@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import http from 'node:http';
-import { HttpServerAdapter } from '../server.adapter';
-import { EndpointsRegistry, ValidatorType, ZodAdapter } from '../../../..';
+import { HttpServerAdapter } from '@core/adapters/servers/http-server/server.adapter';
+import { ValidatorType } from '@core/enums';
+import { ZodAdapter } from '@core/adapters/validators';
+import { EndpointsRegistry } from '@core/registries';
 
 vi.spyOn(http, 'createServer');
 vi.mock('node:http', async (importOriginal) => {

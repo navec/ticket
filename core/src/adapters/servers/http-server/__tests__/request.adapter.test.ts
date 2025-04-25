@@ -1,8 +1,8 @@
 import { IncomingMessage } from 'node:http';
 import { describe, expect, it, vi } from 'vitest';
-import { HttpServerRequestAdapter } from '../request.adapter';
-import { EndpointsRegistry, ScoreValue } from 'core/src/registries';
-import { UnknownFunction } from 'core/src/types';
+import { UnknownFunction } from '@core/types';
+import { EndpointsRegistry, ScoreValue } from '@core/registries';
+import { HttpServerRequestAdapter } from '@core/adapters/servers/http-server/request.adapter';
 
 describe(HttpServerRequestAdapter.name, () => {
 	const createMockRequest = (

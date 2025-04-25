@@ -1,3 +1,4 @@
+import 'tsconfig-paths/register';
 import 'reflect-metadata';
 
 export * from './adapters';

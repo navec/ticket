@@ -1,26 +1,30 @@
 import { describe, it, expect, vi, Mock, afterEach } from 'vitest';
-import { ModuleInjector } from '../module.injector';
-import { ProviderInjector } from '../provider.injector';
-import { ControllerInjector } from '../controller.injector';
 import {
-	ModulesRegistry,
-	PROVIDER_SCOPE_METADATA,
-	getMetadata,
-} from 'core/src';
+	ControllerInjector,
+	ProviderInjector,
+	ModuleInjector,
+} from '@core/injectors';
+import { getMetadata } from '@core/decorators';
+import { PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { ModulesRegistry } from '@core/registries';
 
-vi.mock('core/src', async () => {
-	const actual = await vi.importActual('core/src');
+vi.mock('@core/registries', async () => {
+	const actual = await vi.importActual('@core/registries');
 	return { ...actual, ModulesRegistry: { get: vi.fn() }, getMetadata: vi.fn() };
 });
 
-vi.mock('../provider.injector', async () => {
-	const actual = await vi.importActual('../provider.injector');
-	return { ...actual, resolve: vi.fn() };
+vi.mock('@core/decorators', async () => {
+	const actual = await vi.importActual('@core/decorators');
+	return { ...actual, getMetadata: vi.fn() };
 });
 
-vi.mock('../controller.injector', async () => {
-	const actual = await vi.importActual('../controller.injector');
-	return { ...actual, resolve: vi.fn() };
+vi.mock('@core/injectors', async () => {
+	const actual = await vi.importActual('@core/injectors');
+	return {
+		...actual,
+		ProviderInjector: { resolve: vi.fn() },
+		ControllerInjector: { resolve: vi.fn() },
+	};
 });
 
 describe('ModuleInjector', () => {

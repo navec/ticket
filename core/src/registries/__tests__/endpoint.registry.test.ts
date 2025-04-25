@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { EndpointsRegistry } from '../endpoint.registry';
+import { EndpointsRegistry } from '@core/registries';
 
 describe('EndpointsRegistry', () => {
 	const target = {

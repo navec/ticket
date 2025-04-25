@@ -1,17 +1,14 @@
-import { METHOD_METADATA, PATH_METADATA } from '../../constants';
-import { HttpMethod } from '../../enums';
+import { METHOD_METADATA, PATH_METADATA } from '@core/constants';
+import { HttpMethod } from '@core/enums';
 
 const createHttpRequest = (httpMethod: HttpMethod, path = '/') => {
 	return function (
-		_: unknown,
-		__: string,
+		_: object,
+		__: string | symbol,
 		descriptor: PropertyDescriptor
-	): PropertyDescriptor {
-		const originalMethod = descriptor.value;
-
-		Reflect.defineMetadata(PATH_METADATA, path, originalMethod);
-		Reflect.defineMetadata(METHOD_METADATA, httpMethod, originalMethod);
-		return descriptor;
+	) {
+		Reflect.defineMetadata(PATH_METADATA, path, descriptor.value);
+		Reflect.defineMetadata(METHOD_METADATA, httpMethod, descriptor.value);
 	};
 };
 

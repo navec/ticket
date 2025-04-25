@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import { DtoExtractor } from '../DtoExtractor';
-import { getMetadata, SCHEMA_PARAM_METADATA } from 'core/src';
+import { getMetadata } from '@core/decorators';
+import { SCHEMA_PARAM_METADATA } from '@core/constants';
+import { DtoExtractor } from '@core/extractors';
 
 vi.mock('..', () => ({ getMetadata: vi.fn() }));
 
