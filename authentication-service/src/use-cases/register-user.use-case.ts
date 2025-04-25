@@ -1,8 +1,9 @@
-import { Injectable } from 'core';
-import { AuthService } from '../business/auth.service';
-import { AuthRepositoryInMemory } from '../infrastructure/auth.repository';
-import { CreateUserDto } from '../use-cases/dtos/create-user.dto';
-import { BadRequestException } from 'core';
+import { Injectable } from '@core/decorators';
+import { BadRequestException } from '@core/exceptions';
+
+import { AuthService } from '@business/auth.service';
+import { AuthRepositoryInMemory } from '@infrastructure/auth.repository';
+import { CreateUserDto } from '@use-cases/dtos/create-user.dto';
 
 @Injectable()
 export class RegisterUserUseCase {

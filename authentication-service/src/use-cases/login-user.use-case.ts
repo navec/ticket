@@ -1,13 +1,14 @@
+import { Injectable } from '@core/decorators';
 import {
 	BadRequestException,
 	ForbiddenException,
-	Injectable,
 	NotFoundException,
-} from 'core';
-import { AuthService } from '../business/auth.service';
-import { AuthRepositoryInMemory } from '../infrastructure/auth.repository';
-import { LoginUserDto } from '../use-cases/dtos/login-user.dto';
-import { UserProfile } from '../business/entities/user-profile.entity';
+} from '@core/exceptions';
+
+import { AuthService } from '@business/auth.service';
+import { AuthRepositoryInMemory } from '@infrastructure/auth.repository';
+import { LoginUserDto } from '@use-cases/dtos/login-user.dto';
+import { UserProfile } from '@business/entities/user-profile.entity';
 
 @Injectable()
 export class LoginUserUseCase {
