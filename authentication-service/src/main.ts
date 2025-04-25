@@ -1,7 +1,6 @@
 import { AppBootFactory } from '@core/boot';
-import { ValidatorType } from '@core/enums';
-
 import { AppModule } from './app.module';
+import { ValidatorType } from '@core/enums';
 
 const port = 3000;
 const hostname = 'localhost';

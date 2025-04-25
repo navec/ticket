@@ -1,5 +1,5 @@
-import { Injectable } from '@core/decorators';
-import { createHash } from 'node:crypto';
+import { Injectable } from 'core';
+import { createHash } from 'crypto';
 
 @Injectable()
 export class AuthService {
