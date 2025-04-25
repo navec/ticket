@@ -7,14 +7,12 @@
 	"author": "",
 	"license": "ISC",
 	"scripts": {
+		"prebuild": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
+		"build": "tsc",
 		"lint": "eslint . --fix --max-warnings=0  --ignore-path ../.eslintignore",
 		"format": "prettier . --write",
-		"predev": "cd ../core && npm run build && cd ../authentication-service",
 		"dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/main.ts",
-		"dev:watch": "tsc --watch & node dist/main.js",
-		"prebuild": "rm -rf dist",
-		"build": "tsc",
-		"start": "npm run build && node -r module-alias/register dist/main.js"
+		"start": "ts-node --project ./tsconfig.json -r tsconfig-paths/register dist/main.js"
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.0",
@@ -28,11 +26,5 @@
 		"express": "^4.21.1",
 		"module-alias": "^2.2.3",
 		"reflect-metadata": "^0.2.2"
-	},
-	"_moduleAliases": {
-		"@business": "dist/business",
-		"@presentation": "dist/presentation",
-		"@infrastructure": "dist/infrastructure",
-		"@use-cases": "dist/use-cases"
 	}
 }
