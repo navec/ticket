@@ -37,7 +37,7 @@ export class RouterRegistry {
 						'\x1b[33m',
 						`[INFO] : ${HttpMethod[type]} ${basePath}${path} of ${methodName.toString()} in ${controller.name} controller`
 					);
-					EndpointsRegistry.register(`/${basePath}${path}`, {
+					EndpointsRegistry.register(basePath ? `/${basePath}${path}` : path, {
 						controller: controllerInstance,
 						method: { bound: boundMethod, name: methodName.toString() },
 					});

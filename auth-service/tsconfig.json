@@ -1,15 +1,17 @@
 {
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
+		"baseUrl": ".",
 		"composite": true,
 		"incremental": true,
 		"rootDir": "src",
-		"outDir": "./dist",
+		"outDir": "dist",
 		"declaration": true,
 		"paths": {
 			"@core/*": ["../core/src/*"]
 		}
 	},
-	"include": ["src"],
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist", "**/__tests__"],
 	"references": [{ "path": "../core" }]
 }

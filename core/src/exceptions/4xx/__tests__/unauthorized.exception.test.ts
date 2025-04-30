@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { UnauthorizedException } from '..';
-import { HTTP_STATUS } from '../../../constants';
+import { UnauthorizedException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(UnauthorizedException.name, () => {
 	it('should create an instance with default message and status code', () => {

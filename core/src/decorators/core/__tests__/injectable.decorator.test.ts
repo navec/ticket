@@ -1,10 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import {
-	Injectable,
-	INJECTABLE_METADATA,
-	PROVIDER_SCOPE_METADATA,
-	Scope,
-} from 'core/src';
+import 'reflect-metadata';
+import { INJECTABLE_METADATA, PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { Injectable } from '@core/decorators';
+import { Scope } from '@core/enums';
 
 describe('Injectable Decorator', () => {
 	it('should define metadata for injectable and provider scope', () => {
@@ -23,6 +20,7 @@ describe('Injectable Decorator', () => {
 
 		expect(injectableMetadata).toBe(true);
 		expect(providerScopeMetadata).toEqual({
+			name: TestClass.name,
 			type: 'provider',
 			scope: Scope.SINGLETON,
 		});

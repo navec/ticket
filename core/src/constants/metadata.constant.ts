@@ -1,11 +1,12 @@
 /** meatadata key of controller */
-export const MODULE_METADATA = 'injectable_metadata';
+export const MODULE_METADATA = 'module_metadata';
 export const CONTROLLER_METADATA = 'controller_metadata';
 export const INJECTABLE_METADATA = 'injectable_metadata';
 
 /** meatadata key of provider */
 export const PROVIDER_SCOPE_METADATA = 'provider_scope_metadata';
 
+export const INJECT_METADATA = 'inject_metadata';
 export const PATH_METADATA = 'path_metadata';
 export const METHOD_METADATA = 'method_metadata';
 

@@ -1,7 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { ModulesRegistry } from '../module.registry';
+import { ModulesRegistry } from '@core/registries';
 
-describe('ModulesRegistry', () => {
+describe(ModulesRegistry.name, () => {
 	const TestModule = class TestModule {};
 
 	it('should register a module with a null instance by default', () => {

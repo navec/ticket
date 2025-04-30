@@ -1,5 +1,4 @@
-import { describe, it, expect } from 'vitest';
-import { ZodAdapter } from '../zod.adapter';
+import { ZodAdapter } from '@core/adapters';
 import { z } from 'zod';
 
 describe(ZodAdapter.name, () => {

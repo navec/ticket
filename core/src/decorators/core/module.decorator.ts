@@ -5,6 +5,7 @@ import { ModuleOptions } from '@core/types';
 export const Module = (opts: ModuleOptions) => {
 	return (target: object) => {
 		Reflect.defineMetadata(MODULE_METADATA, true, target);
+
 		Reflect.defineMetadata(
 			PROVIDER_SCOPE_METADATA,
 			{ ...opts, type: 'module', scope: Scope.SINGLETON },

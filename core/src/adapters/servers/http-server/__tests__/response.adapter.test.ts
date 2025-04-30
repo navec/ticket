@@ -1,11 +1,10 @@
-import { describe, expect, it, vi } from 'vitest';
-import { HttpServerResponseAdapter } from '../response.adapter';
 import { ServerResponse } from 'node:http';
-import { HttpException } from 'core/src/exceptions';
+import { HttpServerResponseAdapter } from '@core/adapters';
+import { HttpException } from '@core/exceptions';
 
 describe(HttpServerResponseAdapter.name, () => {
 	it('should set a header on the response', () => {
-		const mockRes = { setHeader: vi.fn() } as unknown as ServerResponse;
+		const mockRes = { setHeader: jest.fn() } as unknown as ServerResponse;
 		const adapter = new HttpServerResponseAdapter(mockRes);
 
 		adapter.setHeader('Content-Type', 'application/json');
@@ -18,8 +17,8 @@ describe(HttpServerResponseAdapter.name, () => {
 
 	it('should send a JSON response with HttpException', () => {
 		const mockRes = {
-			setHeader: vi.fn(),
-			end: vi.fn(),
+			setHeader: jest.fn(),
+			end: jest.fn(),
 			statusCode: 0,
 		} as unknown as ServerResponse;
 		const adapter = new HttpServerResponseAdapter(mockRes);
@@ -37,8 +36,8 @@ describe(HttpServerResponseAdapter.name, () => {
 
 	it('should send a JSON response with a plain object', () => {
 		const mockRes = {
-			setHeader: vi.fn(),
-			end: vi.fn(),
+			setHeader: jest.fn(),
+			end: jest.fn(),
 		} as unknown as ServerResponse;
 		const adapter = new HttpServerResponseAdapter(mockRes);
 		const body = { message: 'Success' };

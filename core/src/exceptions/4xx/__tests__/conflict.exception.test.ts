@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { ConflictException } from '..';
-import { HTTP_STATUS } from '../../../constants';
+import { ConflictException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(ConflictException.name, () => {
 	it('should create an instance with default message and status code', () => {

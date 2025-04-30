@@ -1,35 +1,30 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "commonjs",
+		"strict": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-    "sourceMap": true,
-    "baseUrl": "./",
-    "paths": {
-      "@core/*": ["./core/src/*"],
-      "@auth/*": ["./auth-service/src/*"]
-    },
-  },
-  "ts-node": { // Configuration for ts-node
-    "transpileOnly": true, // Speeds up development
-    "require": ["tsconfig-paths/register"] // Enable path aliases in ts-node
-  },
-  "exclude": [
-		"**/node_modules",
-		"**/dist",
-		"**/*.test.ts",
-		"**/*.spec.ts",
-		"**/__tests__/**",
-		"**/__mocks__/**"
-	],
-  "references": [
-    { "path": "./core" },
-    { "path": "./auth-service" },
-    { "path": "./authentication-service" }
-  ]
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"baseUrl": "./",
+		"types": ["node", "jest"],
+		"paths": {
+			"@core/*": ["./core/src/*"],
+			"@auth/*": ["./auth-service/src/*"]
+		}
+	},
+	"ts-node": {
+		"transpileOnly": true,
+		"require": ["tsconfig-paths/register"]
+	},
+	"exclude": ["**/node_modules", "**/dist", "**/*.config.ts"],
+	"references": [
+		{ "path": "./core" },
+		{ "path": "./auth-service" },
+		{ "path": "./gateway-service" }
+	]
 }

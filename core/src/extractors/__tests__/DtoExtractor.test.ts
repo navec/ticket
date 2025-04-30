@@ -1,26 +1,33 @@
-import { describe, it, expect, vi } from 'vitest';
-import { DtoExtractor } from '../DtoExtractor';
-import { getMetadata, SCHEMA_PARAM_METADATA } from 'core/src';
+import { SCHEMA_PARAM_METADATA } from '@core/constants';
+import { DtoExtractor } from '@core/extractors';
 
-vi.mock('..', () => ({ getMetadata: vi.fn() }));
+const mockGetMetadata = jest.fn();
+jest.mock('@core/decorators', () => ({
+	...jest.requireActual('@core/decorators'),
+	getMetadata: (...args: unknown[]) => mockGetMetadata(...args),
+}));
 
-describe('DtoExtractor', () => {
+describe(DtoExtractor.name, () => {
 	const target = Object.create({});
 	const method = 'testMethod';
 
 	it('should return an empty array if no metadata is found', () => {
 		const extractor = new DtoExtractor({ target, method });
-		vi.mocked(getMetadata).mockReturnValueOnce(undefined);
+		mockGetMetadata.mockReturnValueOnce(undefined);
 
 		const result = extractor.extract();
 
 		expect(result).toEqual([]);
-		expect(getMetadata).toHaveBeenCalledWith(SCHEMA_PARAM_METADATA, {}, method);
+		expect(mockGetMetadata).toHaveBeenCalledWith(
+			SCHEMA_PARAM_METADATA,
+			{},
+			method
+		);
 	});
 
 	it('should extract schemas from metadata', () => {
 		const extractor = new DtoExtractor({ target, method });
-		vi.mocked(getMetadata).mockReturnValueOnce([
+		mockGetMetadata.mockReturnValueOnce([
 			{ index: 0, dtodWithSchema: { schema: { field1: 'value1' } } },
 			{ index: 2, dtodWithSchema: { schema: { field2: 'value2' } } },
 		]);
@@ -32,16 +39,24 @@ describe('DtoExtractor', () => {
 			undefined,
 			{ field2: 'value2' },
 		]);
-		expect(getMetadata).toHaveBeenCalledWith(SCHEMA_PARAM_METADATA, {}, method);
+		expect(mockGetMetadata).toHaveBeenCalledWith(
+			SCHEMA_PARAM_METADATA,
+			{},
+			method
+		);
 	});
 
 	it('should handle an empty metadata array', () => {
 		const extractor = new DtoExtractor({ target, method });
-		vi.mocked(getMetadata).mockReturnValueOnce([]);
+		mockGetMetadata.mockReturnValueOnce([]);
 
 		const result = extractor.extract();
 
 		expect(result).toEqual([]);
-		expect(getMetadata).toHaveBeenCalledWith(SCHEMA_PARAM_METADATA, {}, method);
+		expect(mockGetMetadata).toHaveBeenCalledWith(
+			SCHEMA_PARAM_METADATA,
+			{},
+			method
+		);
 	});
 });

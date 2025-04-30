@@ -1,4 +1,3 @@
-import { describe, it, expect, vi } from 'vitest';
 import { PATH_METADATA, Get, Post, Put, Delete, Patch } from 'core/src';
 
 describe('createHttpRequest', () => {
@@ -9,7 +8,7 @@ describe('createHttpRequest', () => {
 		{ fn: Patch, name: 'Patch' },
 		{ fn: Delete, name: 'Delete' },
 	])('should define metadata for the $name HTTP method and path', ({ fn }) => {
-		const mockDescriptor = { value: vi.fn() };
+		const mockDescriptor = { value: jest.fn() };
 		const path = '/test-path';
 
 		const result = fn(path)({}, '', mockDescriptor);
@@ -19,7 +18,7 @@ describe('createHttpRequest', () => {
 	});
 
 	it('should use default path if none is provided', () => {
-		const mockDescriptor = { value: vi.fn() };
+		const mockDescriptor = { value: jest.fn() };
 
 		const result = Post()({}, '', mockDescriptor);
 
@@ -28,7 +27,7 @@ describe('createHttpRequest', () => {
 	});
 
 	it('should not modify the original method', () => {
-		const originalMethod = vi.fn();
+		const originalMethod = jest.fn();
 		const mockDescriptor = { value: originalMethod };
 
 		const result = Put('/another-path')({}, '', mockDescriptor);

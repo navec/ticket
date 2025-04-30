@@ -1,16 +1,17 @@
 import { AppBootFactory } from '@core/boot';
 import { ValidatorType } from '@core/enums';
 
-import { AppModule } from './app.module';
+import { AuthModule } from '@auth/auth.module';
+import { env } from 'node:process';
 
-const port = 3000;
-const hostname = 'localhost';
+const port = Number(env.PORT || 3000);
+const hostname = env.HOSTNAME || 'localhost';
 
 async function bootstrap() {
-	const app = await AppBootFactory.create(AppModule);
+	const app = await AppBootFactory.create(AuthModule);
 	app.useValidator(ValidatorType.ZOD);
 
-	await app.listen(3000, () => {
+	await app.listen(port, () => {
 		console.log(
 			'\x1b[33m',
 			`[INFO] : Server running at http://${hostname}:${port}/`

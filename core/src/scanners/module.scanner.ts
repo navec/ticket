@@ -1,12 +1,10 @@
-import 'reflect-metadata';
-import { ModulesRegistry } from '@core/registries/module.registry';
+import { ModulesRegistry } from '@core/registries';
 
 import { Constructor } from '@core/types';
 import { getMetadata } from '@core/decorators';
 import { PROVIDER_SCOPE_METADATA } from '@core/constants';
 
-import { ControllerScanner } from './controller.scanner';
-import { ProviderScanner } from './provider.scanner';
+import { ControllerScanner, ProviderScanner } from '.';
 
 export class ModuleScanner {
 	public static scan(moduleName: string, modules: Constructor[]) {

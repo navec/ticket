@@ -1,11 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import 'reflect-metadata';
 import {
-	Controller,
 	CONTROLLER_METADATA,
 	PATH_METADATA,
 	PROVIDER_SCOPE_METADATA,
-	Scope,
-} from 'core/src';
+} from '@core/constants';
+import { Controller } from '@core/decorators';
+import { Scope } from '@core/enums';
 
 describe('Controller Decorator', () => {
 	it('should define metadata for controller type and singleton scope', () => {
@@ -29,7 +29,7 @@ describe('Controller Decorator', () => {
 		Controller()(testController);
 
 		const pathMetadata = Reflect.getMetadata(PATH_METADATA, testController);
-		expect(pathMetadata).toBe('/');
+		expect(pathMetadata).toBe('');
 	});
 
 	it('should define metadata for a custom path', () => {
@@ -38,7 +38,7 @@ describe('Controller Decorator', () => {
 		Controller('/custom-path')(testController);
 
 		const pathMetadata = Reflect.getMetadata(PATH_METADATA, testController);
-		expect(pathMetadata).toBe('/custom-path');
+		expect(pathMetadata).toBe('custom-path');
 	});
 
 	it('should define controller metadata as true', () => {

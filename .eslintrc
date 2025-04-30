@@ -19,5 +19,12 @@
 		"plugin:prettier/recommended"
 	],
 	"plugins": ["prettier", "@typescript-eslint"],
-	"rules": {}
+	"rules": {},
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": "./tsconfig.json"
+      }
+    }
+  }
 }

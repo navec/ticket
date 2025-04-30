@@ -1,44 +1,43 @@
-import { describe, it, expect, vi, afterEach, Mock } from 'vitest';
-import { RouterRegistry } from '../router-registry';
-import {
-	ControllersRegistry,
-	EndpointsRegistry,
-	getMetadata,
-	PATH_METADATA,
-	METHOD_METADATA,
-	Constructor,
-} from 'core/src';
+import { RouterRegistry } from '@core/routers';
+import { Constructor } from '@core/types';
+import { ControllersRegistry } from '@core/registries';
+import { METHOD_METADATA, PATH_METADATA } from '@core/constants';
 
-vi.mock('core/src', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('core/src')>();
-	return { ...actual, getMetadata: vi.fn() };
-});
+const mockGetMetadata = jest.fn();
+jest.mock('@core/decorators', () => ({
+	getMetadata: (...args: unknown[]) => mockGetMetadata(...args),
+}));
+
+const mockEndpointsRegistry = jest.fn();
+jest.mock('@core/registries', () => ({
+	...jest.requireActual('@core/registries'),
+	EndpointsRegistry: {
+		register: (...args: unknown[]) => mockEndpointsRegistry(...args),
+	},
+}));
 
 describe('RouterRegistry', () => {
-	const getMetadataSpy = vi.mocked(getMetadata) as Mock;
-	const endpointsRegistrySpy = vi.spyOn(EndpointsRegistry, 'register');
-
-	const [methodOne, methodTwo] = [vi.fn(), vi.fn()];
+	const [methodOne, methodTwo] = [jest.fn(), jest.fn()];
 	const Controller: Constructor = Object.create({
 		prototype: { methodOne, methodTwo },
 	});
 	const instance = Object.create({ methodOne, methodTwo });
 
 	afterEach(() => {
-		endpointsRegistrySpy.mockClear();
+		mockEndpointsRegistry.mockClear();
 	});
 
 	it('should not call getMetadata when no controllers are registered', () => {
 		const routerRegistry = new RouterRegistry();
 		routerRegistry.register();
 
-		expect(getMetadataSpy).not.toHaveBeenCalled();
+		expect(mockGetMetadata).not.toHaveBeenCalled();
 	});
 
 	it('should register endpoints for valid controllers', () => {
 		ControllersRegistry.register(Controller, instance);
 
-		getMetadataSpy.mockImplementation((key, target) => {
+		mockGetMetadata.mockImplementation((key, target) => {
 			if (key === PATH_METADATA) {
 				if (target === Controller) return 'base';
 				if (target === instance.methodOne) return '/method-one';
@@ -54,20 +53,26 @@ describe('RouterRegistry', () => {
 		const routerRegistry = new RouterRegistry();
 		routerRegistry.register();
 
-		expect(getMetadata).toHaveBeenCalledWith(PATH_METADATA, Controller);
-		expect(getMetadata).toHaveBeenCalledWith(PATH_METADATA, instance.methodOne);
-		expect(getMetadata).toHaveBeenCalledWith(PATH_METADATA, instance.methodTwo);
-		expect(getMetadata).toHaveBeenCalledWith(
+		expect(mockGetMetadata).toHaveBeenCalledWith(PATH_METADATA, Controller);
+		expect(mockGetMetadata).toHaveBeenCalledWith(
+			PATH_METADATA,
+			instance.methodOne
+		);
+		expect(mockGetMetadata).toHaveBeenCalledWith(
+			PATH_METADATA,
+			instance.methodTwo
+		);
+		expect(mockGetMetadata).toHaveBeenCalledWith(
 			METHOD_METADATA,
 			instance.methodOne
 		);
-		expect(getMetadata).toHaveBeenCalledWith(
+		expect(mockGetMetadata).toHaveBeenCalledWith(
 			METHOD_METADATA,
 			instance.methodTwo
 		);
 
-		expect(endpointsRegistrySpy).toHaveBeenCalledTimes(2);
-		expect(endpointsRegistrySpy).toHaveBeenNthCalledWith(
+		expect(mockEndpointsRegistry).toHaveBeenCalledTimes(2);
+		expect(mockEndpointsRegistry).toHaveBeenNthCalledWith(
 			1,
 			'/base/method-one',
 			{
@@ -75,7 +80,7 @@ describe('RouterRegistry', () => {
 				method: { bound: expect.any(Function), name: 'methodOne' },
 			}
 		);
-		expect(endpointsRegistrySpy).toHaveBeenNthCalledWith(
+		expect(mockEndpointsRegistry).toHaveBeenNthCalledWith(
 			2,
 			'/base/method-two',
 			{
@@ -91,12 +96,12 @@ describe('RouterRegistry', () => {
 		const routerRegistry = new RouterRegistry();
 		routerRegistry.register();
 
-		expect(endpointsRegistrySpy).not.toHaveBeenCalled();
+		expect(mockEndpointsRegistry).not.toHaveBeenCalled();
 	});
 
 	it('should skip methods without a path metadata', () => {
 		ControllersRegistry.register(Controller, instance);
-		vi.mocked(getMetadata).mockImplementation((key, target) => {
+		mockGetMetadata.mockImplementation((key, target) => {
 			if (key === PATH_METADATA && target === Controller) return 'base';
 			if (key === PATH_METADATA && target === instance.methodOne)
 				return '/method-one';
@@ -108,12 +113,12 @@ describe('RouterRegistry', () => {
 		const routerRegistry = new RouterRegistry();
 		routerRegistry.register();
 
-		expect(endpointsRegistrySpy).toHaveBeenCalledTimes(1);
-		expect(endpointsRegistrySpy).toHaveBeenCalledWith('/base/method-one', {
+		expect(mockEndpointsRegistry).toHaveBeenCalledTimes(1);
+		expect(mockEndpointsRegistry).toHaveBeenCalledWith('/base/method-one', {
 			controller: instance,
 			method: { bound: expect.any(Function), name: 'methodOne' },
 		});
-		expect(endpointsRegistrySpy).not.toHaveBeenCalledWith(
+		expect(mockEndpointsRegistry).not.toHaveBeenCalledWith(
 			'/base/method-two',
 			expect.anything()
 		);

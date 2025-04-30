@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { MethodNotAllowedException } from '..';
-import { HTTP_STATUS } from '../../../constants';
+import { MethodNotAllowedException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(MethodNotAllowedException.name, () => {
 	it('should create an instance with default message and status code', () => {

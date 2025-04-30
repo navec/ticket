@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { DtoSchema } from '../schema.decorator';
 
 describe('DtoSchema Decorator', () => {

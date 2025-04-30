@@ -3,8 +3,7 @@ import { ModulesRegistry } from '@core/registries';
 import { getMetadata } from '@core/decorators';
 import { PROVIDER_SCOPE_METADATA } from '@core/constants';
 
-import { ControllerInjector } from './controller.injector';
-import { ProviderInjector } from './provider.injector';
+import { ControllerInjector, ProviderInjector } from '@core/injectors';
 
 export class ModuleInjector {
 	static resolve(target: Constructor) {
@@ -23,14 +22,19 @@ export class ModuleInjector {
 			const modules = metadata.imports || [];
 			modules.forEach(ModuleInjector.resolve);
 
-			const providers = metadata.providers || [];
-			providers.forEach((provider: Constructor) => {
-				ProviderInjector.resolve(provider, providers);
+			const providers: Constructor[] = metadata.providers || [];
+
+			const providersName = providers.map((provider) => {
+				const { name } = getMetadata(PROVIDER_SCOPE_METADATA, provider);
+				return name;
+			});
+			providers.forEach((provider, index) => {
+				ProviderInjector.resolve(provider, providersName[index], providersName);
 			});
 
 			const controllers = metadata.controllers || [];
 			controllers.forEach((controller: Constructor) => {
-				ControllerInjector.resolve(controller, controllers, providers);
+				ControllerInjector.resolve(controller, controllers, providersName);
 			});
 
 			module.instance = new target();

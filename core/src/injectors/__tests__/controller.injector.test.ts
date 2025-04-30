@@ -1,18 +1,21 @@
-import { describe, it, expect, vi } from 'vitest';
-import { ControllerInjector } from '../controller.injector';
-import { ControllersRegistry, ProvidersRegistry } from 'core/src';
-import { ProviderInjector } from '../provider.injector';
-import * as Utils from 'core/src/decorators/utils';
+import { ControllerInjector } from '@core/injectors';
+import { ControllersRegistry, ProvidersRegistry } from '@core/registries';
 
-vi.mock('core/src/decorators/utils', async () => {
-	const actual = await vi.importActual('core/src/decorators/utils');
-	return { ...actual, getMetadata: vi.fn() };
-});
+const mockGetMetadata = jest.fn();
+jest.mock('@core/decorators', () => ({
+	...jest.requireActual('@core/decorators'),
+	getMetadata: (...args: unknown[]) => mockGetMetadata(...args),
+}));
 
-describe('ControllerInjector', () => {
-	const getMetadataSpy = vi.spyOn(Utils, 'getMetadata');
-	const providerResolveSpy = vi.spyOn(ProviderInjector, 'resolve');
+const mockProviderInjectorResolver = jest.fn();
+jest.mock('@core/injectors', () => ({
+	...jest.requireActual('@core/injectors'),
+	ProviderInjector: {
+		resolve: (...args: unknown[]) => mockProviderInjectorResolver(...args),
+	},
+}));
 
+describe(ControllerInjector.name, () => {
 	it('should throw an error if the controller is not in the accepted controllers', () => {
 		const target = class {};
 		ControllersRegistry.register(target);
@@ -35,17 +38,19 @@ describe('ControllerInjector', () => {
 		const target = class {};
 
 		ControllersRegistry.register(target);
-		ProvidersRegistry.register(dependency);
+		ProvidersRegistry.register({ name: dependency.name, provider: dependency });
 
-		getMetadataSpy.mockReturnValueOnce([dependency]);
-		providerResolveSpy.mockImplementation(() => ({}));
+		mockGetMetadata.mockReturnValueOnce([dependency]);
+		mockProviderInjectorResolver.mockImplementation(() => ({}));
 
 		const instance = ControllerInjector.resolve(target);
 
 		expect(instance).toBeInstanceOf(target);
-		expect(ProviderInjector.resolve).toHaveBeenCalledWith(dependency, [
+		expect(mockProviderInjectorResolver).toHaveBeenCalledWith(
 			dependency,
-		]);
+			dependency.name,
+			['dependency']
+		);
 	});
 
 	it('should reuse an existing controller instance if already resolved', () => {
@@ -64,9 +69,13 @@ describe('ControllerInjector', () => {
 			constructor(public dep: unknown) {}
 		};
 		ControllersRegistry.register(target);
-		ProvidersRegistry.register(dependency, { instance: {} });
-		getMetadataSpy.mockReturnValueOnce([dependency]);
-		providerResolveSpy.mockImplementation(() => 'mockDependency');
+		ProvidersRegistry.register({
+			name: dependency.name,
+			provider: dependency,
+			instance: {},
+		});
+		mockGetMetadata.mockReturnValueOnce([dependency]);
+		mockProviderInjectorResolver.mockImplementation(() => 'mockDependency');
 
 		const instance = ControllerInjector.resolve(target) as InstanceType<
 			typeof target

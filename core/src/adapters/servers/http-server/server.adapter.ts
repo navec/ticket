@@ -1,4 +1,4 @@
-import http, { Server } from 'node:http';
+import { Server, createServer } from 'node:http';
 import { ServerAdapter, ValidatorAdapter, ZodAdapter } from '@core/adapters';
 import { HttpServerRequestAdapter } from './request.adapter';
 import { HttpServerResponseAdapter } from './response.adapter';
@@ -28,7 +28,8 @@ export class HttpServerAdapter extends ServerAdapter {
 	constructor() {
 		super();
 
-		this.server = http.createServer(async (req, res) => {
+		// console.log({ createServer });
+		this.server = createServer(async (req, res) => {
 			const request = new HttpServerRequestAdapter(req);
 			const response = new HttpServerResponseAdapter(res);
 
@@ -76,6 +77,7 @@ export class HttpServerAdapter extends ServerAdapter {
 				const data = await endpoint.method.bound(...params);
 				response.send(data);
 			} catch (error) {
+				console.error(error);
 				const isHttpException = error instanceof HttpException;
 				response.send(isHttpException ? error : new InternalServerException());
 			}

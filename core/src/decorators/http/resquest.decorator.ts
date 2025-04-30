@@ -9,7 +9,8 @@ const createHttpRequest = (httpMethod: HttpMethod, path = '/') => {
 	): PropertyDescriptor {
 		const originalMethod = descriptor.value;
 
-		Reflect.defineMetadata(PATH_METADATA, path, originalMethod);
+		const formattedPath = path.startsWith('/') ? path : `/${path}`;
+		Reflect.defineMetadata(PATH_METADATA, formattedPath, originalMethod);
 		Reflect.defineMetadata(METHOD_METADATA, httpMethod, originalMethod);
 		return descriptor;
 	};

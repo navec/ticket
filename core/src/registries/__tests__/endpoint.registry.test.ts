@@ -1,10 +1,9 @@
-import { describe, it, expect, afterEach, vi } from 'vitest';
-import { EndpointsRegistry } from '../endpoint.registry';
+import { EndpointsRegistry } from '@core/registries';
 
-describe('EndpointsRegistry', () => {
+describe(EndpointsRegistry.name, () => {
 	const target = {
-		method: { bound: vi.fn(), name: 'testMethod' },
-		controller: { testController: vi.fn() },
+		method: { bound: jest.fn(), name: 'testMethod' },
+		controller: { testController: jest.fn() },
 	};
 
 	afterEach(() => {
@@ -34,8 +33,8 @@ describe('EndpointsRegistry', () => {
 
 	describe('get', () => {
 		const commonTarget = {
-			method: { bound: vi.fn(), name: 'testMethod' },
-			controller: { testController: vi.fn() },
+			method: { bound: jest.fn(), name: 'testMethod' },
+			controller: { testController: jest.fn() },
 		};
 
 		it('should retrieve a static path from the store', () => {

@@ -1,5 +1,4 @@
-import { describe, it, expect } from 'vitest';
-import { HttpException } from '..';
+import { HttpException } from '@core/exceptions';
 
 describe(HttpException.name, () => {
 	it('should create an instance with the correct properties', () => {

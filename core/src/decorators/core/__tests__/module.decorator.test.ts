@@ -1,10 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import {
-	MODULE_METADATA,
-	PROVIDER_SCOPE_METADATA,
-	Scope,
-	Module,
-} from 'core/src';
+import 'reflect-metadata';
+import { MODULE_METADATA, PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { Module } from '@core/decorators';
+import { Scope } from '@core/enums';
 
 describe('Module Decorator', () => {
 	it('should define MODULE_METADATA on the target', () => {

@@ -5,8 +5,8 @@
 	"author": "",
 	"license": "ISC",
 	"description": "",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"main": "dist/main.js",
+	"types": "dist/main.d.ts",
 	"scripts": {
 		"prebuild": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
 		"build": "tsc",
@@ -15,15 +15,10 @@
 		"test:watch": "cd .. && npm run test:watch core/",
 		"test:coverage": "cd .. && npm run test:coverage core/",
 		"lint": "eslint . --fix --max-warnings=0  --ignore-path ../.eslintignore",
-		"format": "prettier . --write"
+		"format": "prettier . --write",
+		"dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only  --env-file=.env src/main.ts",
+		"start": "ts-node --project ./tsconfig.json -r tsconfig-paths/register dist/main.js"
 	},
-	"dependencies": {
-		"passport": "^0.7.0",
-		"passport-local": "^1.0.0"
-	},
-	"devDependencies": {
-		"@types/passport": "^1.0.17",
-		"@types/passport-local": "^1.0.38",
-		"typescript": "^5.8.3"
-	}
+	"dependencies": {},
+	"devDependencies": {}
 }

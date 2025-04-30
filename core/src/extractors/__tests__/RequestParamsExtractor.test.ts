@@ -1,15 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
-import { RequestParamsExtractor } from '../RequestParamsExtractor';
-import { Request, Response, ParamType } from 'core/src';
-import * as Utils from 'core/src/decorators/utils';
+import { RequestParamsExtractor } from '@core/extractors';
+import { Request, Response } from '@core/adapters';
+import { ParamType } from '@core/enums';
 
-vi.mock('core/src/decorators/utils', async () => {
-	const actual = await vi.importActual('core/src/decorators/utils');
-	return { ...actual, getMetadata: vi.fn() };
-});
+const mockGetMetadata = jest.fn();
+jest.mock('@core/decorators', () => ({
+	...jest.requireActual('@core/decorators'),
+	getMetadata: (...args: unknown[]) => mockGetMetadata(...args),
+}));
 
 describe(RequestParamsExtractor.name, () => {
-	const getMetadataSpy = vi.spyOn(Utils, 'getMetadata');
 	const request = {
 		body: Promise.resolve({ key1: 'value1', key2: 'value2' }),
 		query: { queryKey: 'queryValue' },
@@ -19,13 +18,13 @@ describe(RequestParamsExtractor.name, () => {
 
 	const response = {} as Response;
 
-	const target = { someMethod: vi.fn() };
+	const target = { someMethod: jest.fn() };
 	const method = Object.keys(target).shift() || '';
 
 	it('should extract body parameters correctly for body with key', async () => {
 		const params = { request, response, target, method };
 		const extractor = new RequestParamsExtractor(params);
-		getMetadataSpy.mockReturnValueOnce([{ index: 0, key: 'key1' }]);
+		mockGetMetadata.mockReturnValueOnce([{ index: 0, key: 'key1' }]);
 
 		const result = await extractor.extract();
 
@@ -35,7 +34,7 @@ describe(RequestParamsExtractor.name, () => {
 	it('should extract body parameters correctly', async () => {
 		const params = { request, response, target, method };
 		const extractor = new RequestParamsExtractor(params);
-		getMetadataSpy.mockReturnValueOnce([{ index: 0 }]);
+		mockGetMetadata.mockReturnValueOnce([{ index: 0 }]);
 
 		const result = await extractor.extract();
 
@@ -45,7 +44,7 @@ describe(RequestParamsExtractor.name, () => {
 	it('should extract query parameters correctly for query with key', async () => {
 		const params = { request, response, target, method };
 		const extractor = new RequestParamsExtractor(params);
-		getMetadataSpy
+		mockGetMetadata
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([{ index: 0, key: 'queryKey' }]);
@@ -58,7 +57,7 @@ describe(RequestParamsExtractor.name, () => {
 	it('should extract query parameters correctly', async () => {
 		const params = { request, response, target, method };
 		const extractor = new RequestParamsExtractor(params);
-		getMetadataSpy
+		mockGetMetadata
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([{ index: 0 }]);
@@ -71,7 +70,7 @@ describe(RequestParamsExtractor.name, () => {
 	it('should extract path parameters correctly for path with key', async () => {
 		const params = { request, response, target, method };
 		const extractor = new RequestParamsExtractor(params);
-		getMetadataSpy
+		mockGetMetadata
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([{ index: 0, key: 'pathKey' }]);
 
@@ -83,7 +82,7 @@ describe(RequestParamsExtractor.name, () => {
 	it('should extract path parameters correctly', async () => {
 		const params = { request, response, target, method };
 		const extractor = new RequestParamsExtractor(params);
-		getMetadataSpy.mockReturnValueOnce([]).mockReturnValueOnce([{ index: 0 }]);
+		mockGetMetadata.mockReturnValueOnce([]).mockReturnValueOnce([{ index: 0 }]);
 
 		const result = await extractor.extract();
 
@@ -93,7 +92,7 @@ describe(RequestParamsExtractor.name, () => {
 	it('should extract request object correctly', async () => {
 		const params = { request, response, target, method };
 		const extractor = new RequestParamsExtractor(params);
-		getMetadataSpy
+		mockGetMetadata
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([])
@@ -114,7 +113,7 @@ describe(RequestParamsExtractor.name, () => {
 	it('should extract response object correctly', async () => {
 		const params = { request, response, target, method };
 		const extractor = new RequestParamsExtractor(params);
-		getMetadataSpy
+		mockGetMetadata
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([])
@@ -134,7 +133,7 @@ describe(RequestParamsExtractor.name, () => {
 			fake: 'unsupported_param_metadata',
 		} as unknown as Record<ParamType, string>;
 
-		getMetadataSpy
+		mockGetMetadata
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([])
 			.mockReturnValueOnce([])

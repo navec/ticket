@@ -5,11 +5,14 @@ import {
 } from '@core/constants';
 import { Scope } from '@core/enums';
 
-export const Controller = (path = '/') => {
+export const Controller = (path = '') => {
 	return (target: object) => {
 		const opts = { type: 'controller', scope: Scope.SINGLETON };
+
+		const formattedPath = path.replace(/^\/|\/$/g, '');
+
 		Reflect.defineMetadata(PROVIDER_SCOPE_METADATA, opts, target);
-		Reflect.defineMetadata(PATH_METADATA, path, target);
+		Reflect.defineMetadata(PATH_METADATA, formattedPath, target);
 		Reflect.defineMetadata(CONTROLLER_METADATA, true, target);
 	};
 };

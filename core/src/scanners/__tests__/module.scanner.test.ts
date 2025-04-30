@@ -1,39 +1,34 @@
-import { describe, it, expect, vi, afterEach, Mock } from 'vitest';
-import { ModuleScanner } from '../module.scanner';
-import {
-	Constructor,
-	getMetadata,
-	ModulesRegistry,
-	PROVIDER_SCOPE_METADATA,
-} from 'core/src';
-import { ProviderScanner } from '../provider.scanner';
-import { ControllerScanner } from '../controller.scanner';
+import { ModuleScanner } from '@core/scanners';
+import { PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { Constructor } from '@core/types';
 
-vi.mock('../provider.scanner', () => ({
-	ProviderScanner: { scan: vi.fn() },
+const mockProviderScanner = jest.fn();
+const mockControllerScanner = jest.fn();
+jest.mock('@core/scanners', () => ({
+	...jest.requireActual('@core/scanners'),
+	ProviderScanner: {
+		scan: (...args: unknown[]) => mockProviderScanner(...args),
+	},
+	ControllerScanner: {
+		scan: (...args: unknown[]) => mockControllerScanner(...args),
+	},
 }));
 
-vi.mock('../controller.scanner', () => ({
-	ControllerScanner: { scan: vi.fn() },
+const mockGetMetadata = jest.fn();
+jest.mock('@core/decorators', () => ({
+	getMetadata: (...args: unknown[]) => mockGetMetadata(...args),
 }));
 
-vi.mock('core/src', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('core/src')>();
-	return {
-		...actual,
-		ModulesRegistry: { register: vi.fn() },
-		getMetadata: vi.fn(),
-	};
-});
+const mockModulesRegistry = jest.fn();
+jest.mock('@core/registries/module.registry', () => ({
+	ModulesRegistry: {
+		register: (...args: unknown[]) => mockModulesRegistry(...args),
+	},
+}));
 
 describe('ModuleScanner', () => {
-	const getMetadataSpy = vi.mocked(getMetadata) as Mock;
-	const modulesRegistrySpy = vi.mocked(ModulesRegistry.register) as Mock;
-	const providerScanSpy = vi.mocked(ProviderScanner.scan) as Mock;
-	const controllerScanSpy = vi.mocked(ControllerScanner.scan) as Mock;
-
 	afterEach(() => {
-		vi.clearAllMocks();
+		jest.clearAllMocks();
 	});
 
 	it('should throw an error if a module is null or undefined', () => {
@@ -48,18 +43,18 @@ describe('ModuleScanner', () => {
 
 	it('should throw an error if metadata type is not "module"', () => {
 		const TestModule = class TestModule {};
-		getMetadataSpy.mockReturnValueOnce({ type: 'provider' });
+		mockGetMetadata.mockReturnValueOnce({ type: 'provider' });
 
 		const callback = () => ModuleScanner.scan('TestModule', [TestModule]);
 
-		expect(callback).toThrowError(
+		expect(callback).toThrow(
 			'module type is required, currently we have provider type'
 		);
 	});
 
 	it('should register the module and scan its imports, providers, and controllers', () => {
 		const TestModule = class TestModule {};
-		getMetadataSpy
+		mockGetMetadata
 			.mockReturnValueOnce({
 				type: 'module',
 				imports: [class ImportModule {}],
@@ -75,19 +70,19 @@ describe('ModuleScanner', () => {
 
 		ModuleScanner.scan('TestModule', [TestModule]);
 
-		expect(modulesRegistrySpy).toHaveBeenCalledWith(TestModule);
-		expect(getMetadataSpy).toHaveBeenCalledWith(
+		expect(mockModulesRegistry).toHaveBeenCalledWith(TestModule);
+		expect(mockGetMetadata).toHaveBeenCalledWith(
 			PROVIDER_SCOPE_METADATA,
 			TestModule
 		);
-		expect(providerScanSpy).toHaveBeenCalledWith([expect.any(Function)]);
-		expect(controllerScanSpy).toHaveBeenCalledWith([expect.any(Function)]);
+		expect(mockProviderScanner).toHaveBeenCalledWith([expect.any(Function)]);
+		expect(mockControllerScanner).toHaveBeenCalledWith([expect.any(Function)]);
 	});
 
 	it('should handle nested module imports', () => {
 		const TestModule = class TestModule {};
 		const NestedModule = class NestedModule {};
-		getMetadataSpy
+		mockGetMetadata
 			.mockReturnValueOnce({
 				type: 'module',
 				imports: [NestedModule],
@@ -103,8 +98,8 @@ describe('ModuleScanner', () => {
 
 		ModuleScanner.scan('TestModule', [TestModule]);
 
-		expect(modulesRegistrySpy).toHaveBeenCalledTimes(2);
-		expect(modulesRegistrySpy).toHaveBeenCalledWith(TestModule);
-		expect(modulesRegistrySpy).toHaveBeenCalledWith(NestedModule);
+		expect(mockModulesRegistry).toHaveBeenCalledTimes(2);
+		expect(mockModulesRegistry).toHaveBeenCalledWith(TestModule);
+		expect(mockModulesRegistry).toHaveBeenCalledWith(NestedModule);
 	});
 });
