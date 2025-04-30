@@ -1,8 +1,11 @@
 import 'reflect-metadata';
-import { describe, it, expect, vi } from 'vitest';
 import { getMetadata } from '../get-metadata.util';
 
-describe('getMetadata', () => {
+describe(getMetadata.name, () => {
+	const getMetadataSpy = jest.spyOn(Reflect, 'getMetadata');
+
+	afterEach(getMetadataSpy.mockClear);
+
 	it('should return metadata for a class', () => {
 		const metadataKey = 'testKey';
 		const metadataValue = 'testValue';
@@ -46,23 +49,23 @@ describe('getMetadata', () => {
 	it('should call Reflect.getMetadata with correct arguments for a class', () => {
 		const metadataKey = 'testKey';
 		const target = class {};
-		const spy = vi.spyOn(Reflect, 'getMetadata');
 
 		getMetadata(metadataKey, target);
 
-		expect(spy).toHaveBeenCalledWith(metadataKey, target);
-		spy.mockRestore();
+		expect(getMetadataSpy).toHaveBeenCalledWith(metadataKey, target);
 	});
 
 	it('should call Reflect.getMetadata with correct arguments for a class property', () => {
 		const metadataKey = 'testKey';
 		const target = {};
 		const propertyKey = 'testProperty';
-		const spy = vi.spyOn(Reflect, 'getMetadata');
 
 		getMetadata(metadataKey, target, propertyKey);
 
-		expect(spy).toHaveBeenCalledWith(metadataKey, target, propertyKey);
-		spy.mockRestore();
+		expect(getMetadataSpy).toHaveBeenCalledWith(
+			metadataKey,
+			target,
+			propertyKey
+		);
 	});
 });

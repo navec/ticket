@@ -1,5 +1,7 @@
-import { HttpServerRequestAdapter } from '../servers/http-server/request.adapter';
-import { HttpServerResponseAdapter } from '../servers/http-server/response.adapter';
+import {
+	HttpServerRequestAdapter,
+	HttpServerResponseAdapter,
+} from '@core/adapters';
 
 export abstract class MiddlewareAdapter {
 	abstract use(

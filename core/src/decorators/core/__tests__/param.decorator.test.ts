@@ -1,19 +1,29 @@
-import { describe, it, expect, vi } from 'vitest';
+import 'reflect-metadata';
 import {
 	BODY_PARAM_METADATA,
 	QUERY_PARAM_METADATA,
 	PATH_PARAM_METADATA,
 	REQ_PARAM_METADATA,
 	RES_PARAM_METADATA,
+	SCHEMA_PARAM_METADATA,
+} from '@core/constants';
+import {
 	BodyParam,
 	QueryParam,
 	PathParam,
 	ReqParam,
 	ResParam,
-	SCHEMA_PARAM_METADATA,
-} from 'core/src';
+} from '@core/decorators';
 
 describe('Param decorator', () => {
+	const defineMetadataSpy = jest.spyOn(Reflect, 'defineMetadata');
+	const getMetadataSpy = jest.spyOn(Reflect, 'getMetadata');
+
+	afterEach(() => {
+		defineMetadataSpy.mockClear();
+		getMetadataSpy.mockClear();
+	});
+
 	it('should throw an error if propertyKey is undefined', () => {
 		const target = Object.create({});
 		const index = 0;
@@ -34,7 +44,6 @@ describe('Param decorator', () => {
 		({ callback, metadata }) => {
 			const target = Object.create({});
 			const [method, index, key] = ['method', 0, 'key'];
-			const defineMetadataSpy = vi.spyOn(Reflect, 'defineMetadata');
 
 			callback(key)(target, method, index);
 
@@ -50,9 +59,7 @@ describe('Param decorator', () => {
 	it('should add metadata for the parameter', () => {
 		const target = Object.create({});
 		const [method, index, key] = ['method', 0, 'key'];
-		const defineMetadataSpy = vi.spyOn(Reflect, 'defineMetadata');
-
-		vi.spyOn(Reflect, 'getMetadata').mockReturnValueOnce([]);
+		getMetadataSpy.mockReturnValueOnce([]);
 
 		BodyParam(key)(target, method, index);
 
@@ -70,10 +77,7 @@ describe('Param decorator', () => {
 
 		const target = Object.create({});
 		const [method, index, key] = ['method', 0, 'key'];
-		const defineMetadataSpy = vi.spyOn(Reflect, 'defineMetadata');
-		vi.spyOn(Reflect, 'getMetadata')
-			.mockReturnValueOnce([])
-			.mockReturnValueOnce(mockParamTypes);
+		getMetadataSpy.mockReturnValueOnce([]).mockReturnValueOnce(mockParamTypes);
 
 		QueryParam(key)(target, method, index);
 
@@ -98,12 +102,8 @@ describe('Param decorator', () => {
 	it('should not add schema metadata if parameter is not a DTO', () => {
 		const target = Object.create({});
 		const [method, index, key] = ['method', 0, 'key'];
-		const defineMetadataSpy = vi.spyOn(Reflect, 'defineMetadata');
-
 		const mockParamTypes = [{}];
-		vi.spyOn(Reflect, 'getMetadata')
-			.mockReturnValueOnce([])
-			.mockReturnValueOnce(mockParamTypes);
+		getMetadataSpy.mockReturnValueOnce([]).mockReturnValueOnce(mockParamTypes);
 
 		ReqParam(key)(target, method, index);
 

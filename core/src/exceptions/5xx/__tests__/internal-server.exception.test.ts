@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { InternalServerException } from '..';
-import { HTTP_STATUS } from '../../../constants';
+import { InternalServerException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(InternalServerException.name, () => {
 	it('should create an instance with default message and status code', () => {

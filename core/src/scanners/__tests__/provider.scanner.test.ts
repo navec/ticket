@@ -1,42 +1,43 @@
-import { describe, it, expect, vi, afterEach, Mock } from 'vitest';
-import { ProviderScanner } from '../provider.scanner';
-import {
-	getMetadata,
-	PROVIDER_SCOPE_METADATA,
-	ProvidersRegistry,
-} from 'core/src';
+import { PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { ProviderScanner } from '@core/scanners';
 
-vi.mock('core/src', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('core/src')>();
-	return {
-		...actual,
-		getMetadata: vi.fn(),
-		ProvidersRegistry: { register: vi.fn() },
-	};
-});
+const mockGetMetadata = jest.fn();
+jest.mock('@core/decorators', () => ({
+	getMetadata: (...args: unknown[]) => mockGetMetadata(...args),
+}));
+
+const mockProvidersRegistry = jest.fn();
+jest.mock('@core/registries', () => ({
+	...jest.requireActual('@core/registries'),
+	ProvidersRegistry: {
+		register: (...args: unknown[]) => mockProvidersRegistry(...args),
+	},
+}));
 
 describe('ProviderScanner', () => {
-	const getMetadataSpy = getMetadata as Mock;
 	const Provider = class Provider {};
 
 	afterEach(() => {
-		vi.clearAllMocks();
+		jest.clearAllMocks();
 	});
 
 	it('should register a provider if metadata type is "provider"', () => {
-		getMetadataSpy.mockReturnValue({ type: 'provider' });
+		mockGetMetadata.mockReturnValue({ type: 'provider', name: Provider.name });
 
 		ProviderScanner.scan([Provider]);
 
-		expect(ProvidersRegistry.register).toHaveBeenCalledWith(Provider);
-		expect(getMetadataSpy).toHaveBeenCalledWith(
+		expect(mockProvidersRegistry).toHaveBeenCalledWith({
+			name: Provider.name,
+			provider: Provider,
+		});
+		expect(mockGetMetadata).toHaveBeenCalledWith(
 			PROVIDER_SCOPE_METADATA,
 			Provider
 		);
 	});
 
 	it('should throw an error if metadata type is not "provider"', () => {
-		getMetadataSpy.mockReturnValue({ type: 'service' });
+		mockGetMetadata.mockReturnValue({ type: 'service' });
 
 		const callback = () => ProviderScanner.scan([Provider]);
 
@@ -44,10 +45,10 @@ describe('ProviderScanner', () => {
 			'provider type is required, currently we have service type'
 		);
 
-		expect(getMetadataSpy).toHaveBeenCalledWith(
+		expect(mockGetMetadata).toHaveBeenCalledWith(
 			PROVIDER_SCOPE_METADATA,
 			Provider
 		);
-		expect(ProvidersRegistry.register).not.toHaveBeenCalled();
+		expect(mockProvidersRegistry).not.toHaveBeenCalled();
 	});
 });

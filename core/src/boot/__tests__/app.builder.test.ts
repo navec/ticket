@@ -1,27 +1,35 @@
-import { describe, it, expect, vi } from 'vitest';
-import { AppBuilder } from '../app.builder';
-import { Constructor, ServerAdapter } from 'core/src';
+import { AppBuilder } from '@core/boot';
 
-vi.mock('core/src', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('core/src')>();
-	return {
-		...actual,
-		Scanner: class {
-			scan = vi.fn();
-		},
-		Injector: class {
-			inject = vi.fn();
-		},
-		RouterRegistry: class {
-			register = vi.fn();
-		},
-	};
-});
+const mockScannerScan = jest.fn();
+jest.mock('@core/scanners', () => ({
+	Scanner: class {
+		scan = (...args: unknown[]) => mockScannerScan(...args);
+	},
+}));
 
-describe('AppBuilder', () => {
+const mockInjectorInject = jest.fn();
+jest.mock('@core/injectors', () => ({
+	Injector: class {
+		inject = (...args: unknown[]) => mockInjectorInject(...args);
+	},
+}));
+
+const mockRouterRegistryRegister = jest.fn();
+jest.mock('@core/routers', () => ({
+	RouterRegistry: class {
+		register = (...args: unknown[]) => mockRouterRegistryRegister(...args);
+	},
+}));
+
+describe(AppBuilder.name, () => {
+	let appBuilder: AppBuilder;
+
+	beforeEach(() => {
+		appBuilder = new AppBuilder();
+	});
+
 	it('should set the module correctly', () => {
-		const appBuilder = new AppBuilder();
-		const mockModule = {} as Constructor;
+		const mockModule = Object.create({});
 
 		appBuilder.setModule(mockModule);
 
@@ -29,8 +37,7 @@ describe('AppBuilder', () => {
 	});
 
 	it('should set the server correctly', () => {
-		const appBuilder = new AppBuilder();
-		const mockServer = {} as ServerAdapter;
+		const mockServer = Object.create({});
 
 		appBuilder.setServer(mockServer);
 
@@ -38,8 +45,7 @@ describe('AppBuilder', () => {
 	});
 
 	it('should throw an error if build is called without a server', () => {
-		const appBuilder = new AppBuilder();
-		const mockModule = {} as Constructor;
+		const mockModule = Object.create({});
 
 		appBuilder.setModule(mockModule);
 
@@ -49,8 +55,7 @@ describe('AppBuilder', () => {
 	});
 
 	it('should throw an error if build is called without a module', () => {
-		const appBuilder = new AppBuilder();
-		const mockServer = {} as ServerAdapter;
+		const mockServer = Object.create({});
 
 		appBuilder.setServer(mockServer);
 
@@ -60,25 +65,17 @@ describe('AppBuilder', () => {
 	});
 
 	it('should call scanner, injector, and routerRegistry methods during build', () => {
-		const appBuilder = new AppBuilder();
-		const mockModule = {} as Constructor;
-		const mockServer = {} as ServerAdapter;
+		const mockModule = Object.create({});
+		const mockServer = Object.create({});
 
-		const scannerSpy = vi.spyOn(appBuilder['scanner'], 'scan');
-		const injectorSpy = vi.spyOn(appBuilder['injector'], 'inject');
-		const routerRegistrySpy = vi.spyOn(
-			appBuilder['routerRegistry'],
-			'register'
-		);
+		const result = appBuilder
+			.setModule(mockModule)
+			.setServer(mockServer)
+			.build();
 
-		appBuilder.setModule(mockModule);
-		appBuilder.setServer(mockServer);
-
-		const result = appBuilder.build();
-
-		expect(scannerSpy).toHaveBeenCalledWith(mockModule);
-		expect(injectorSpy).toHaveBeenCalledWith(mockModule);
-		expect(routerRegistrySpy).toHaveBeenCalled();
+		expect(mockScannerScan).toHaveBeenCalledWith(mockModule);
+		expect(mockInjectorInject).toHaveBeenCalledWith(mockModule);
+		expect(mockRouterRegistryRegister).toHaveBeenCalled();
 		expect(result).toBe(mockServer);
 	});
 });

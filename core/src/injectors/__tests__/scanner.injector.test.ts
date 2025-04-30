@@ -1,18 +1,25 @@
-import { describe, it, expect, vi, Mock } from 'vitest';
-import { AutoLoader } from '../scanner.injector';
-import { getMetadata } from 'core/src';
+import { AutoLoader } from '@core/injectors';
 
-vi.mock('..', () => ({ getMetadata: vi.fn() }));
+const mockGetMetadata = jest.fn();
+jest.mock('@core/decorators', () => ({
+	...jest.requireActual('@core/decorators'),
+	getMetadata: (...args: unknown[]) => mockGetMetadata(...args),
+}));
 
-describe('AutoLoader', () => {
+// const mockGetMetadata = jest.fn();
+// jest.mock('@core/injectors', () => ({
+// 	...jest.requireActual('@core/injectors'),
+// 	getMetadata: (...args: unknown[]) => mockGetMetadata(...args),
+// }));
+
+describe(AutoLoader.name, () => {
 	const MockProvider = class MockProvider {};
 	const MockController = class MockController {};
 	const MockModule = class MockModule {};
-	const getMetadataSpy = vi.mocked(getMetadata) as Mock;
 
-	describe('loadProvider', () => {
+	describe(AutoLoader.loadProvider.name, () => {
 		it('should throw an error if provider type is not "provider"', () => {
-			getMetadataSpy.mockReturnValue({ type: 'invalid' });
+			mockGetMetadata.mockReturnValue({ type: 'invalid' });
 			const expectedMessage =
 				'provider type is required, currently we have invalid type';
 
@@ -23,7 +30,7 @@ describe('AutoLoader', () => {
 		});
 
 		it('should throw an error if provider is not in the accepted list', () => {
-			vi.mocked(getMetadata).mockReturnValue({ type: 'provider' });
+			mockGetMetadata.mockReturnValue({ type: 'provider' });
 			const expectedMessage =
 				'MockProvider is not accepted. Here is accepted provider list [  ].';
 
@@ -34,7 +41,7 @@ describe('AutoLoader', () => {
 
 		it('should throw an error if there is a cyclic dependency', () => {
 			const alreadyLoaded = new Set([MockProvider]);
-			vi.mocked(getMetadata).mockReturnValue({ type: 'provider' });
+			mockGetMetadata.mockReturnValue({ type: 'provider' });
 			const expectedMessage =
 				'We have a cyclic dependency with MockProvider provider';
 
@@ -45,7 +52,7 @@ describe('AutoLoader', () => {
 		});
 
 		it('should load a provider without dependencies', () => {
-			getMetadataSpy
+			mockGetMetadata
 				.mockReturnValueOnce({ type: 'provider' })
 				.mockReturnValueOnce(undefined);
 
@@ -57,7 +64,7 @@ describe('AutoLoader', () => {
 
 		it('should load a provider with dependencies', () => {
 			const Dependency = class Dependency {};
-			getMetadataSpy
+			mockGetMetadata
 				.mockReturnValueOnce({ type: 'provider' })
 				.mockReturnValueOnce([Dependency])
 				.mockReturnValueOnce({ type: 'provider' })
@@ -73,9 +80,9 @@ describe('AutoLoader', () => {
 		});
 	});
 
-	describe('loadController', () => {
+	describe(AutoLoader.loadController.name, () => {
 		it('should throw an error if controller type is not "controller"', () => {
-			getMetadataSpy.mockReturnValue({ type: 'invalid' });
+			mockGetMetadata.mockReturnValue({ type: 'invalid' });
 			const expectedMessage =
 				'controller type is required, currently we have invalid type';
 
@@ -86,7 +93,7 @@ describe('AutoLoader', () => {
 		});
 
 		it('should throw an error if controller is not in the accepted list', () => {
-			getMetadataSpy.mockReturnValue({ type: 'controller' });
+			mockGetMetadata.mockReturnValue({ type: 'controller' });
 			const expectedMessage =
 				'MockController is not accepted. Here is accepted controller list [  ].';
 
@@ -96,7 +103,7 @@ describe('AutoLoader', () => {
 		});
 
 		it('should throw an error if there is a cyclic dependency', () => {
-			getMetadataSpy.mockReturnValue({ type: 'controller' });
+			mockGetMetadata.mockReturnValue({ type: 'controller' });
 			const alreadyLoaded = new Set([MockController]);
 			const expectedMessage =
 				'We have a cyclic dependency with MockController controller';
@@ -112,7 +119,7 @@ describe('AutoLoader', () => {
 		});
 
 		it('should load a controller without dependencies', () => {
-			getMetadataSpy
+			mockGetMetadata
 				.mockReturnValueOnce({ type: 'controller' })
 				.mockReturnValueOnce(undefined);
 
@@ -126,7 +133,7 @@ describe('AutoLoader', () => {
 
 		it('should load a controller with dependencies', () => {
 			const Dependency = class Dependency {};
-			getMetadataSpy
+			mockGetMetadata
 				.mockReturnValueOnce({ type: 'controller' })
 				.mockReturnValueOnce([Dependency])
 				.mockReturnValueOnce({ type: 'provider' })
@@ -142,9 +149,9 @@ describe('AutoLoader', () => {
 		});
 	});
 
-	describe('loadModule', () => {
+	describe(AutoLoader.loadModule.name, () => {
 		it('should throw an error if module type is not "module"', () => {
-			vi.mocked(getMetadata).mockReturnValue({ type: 'invalid' });
+			mockGetMetadata.mockReturnValue({ type: 'invalid' });
 			const expectedMessage =
 				'module type is required, currently we have invalid type';
 
@@ -154,7 +161,7 @@ describe('AutoLoader', () => {
 		});
 
 		it('should throw an error if there is a cyclic dependency', () => {
-			vi.mocked(getMetadata).mockReturnValue({ type: 'module' });
+			mockGetMetadata.mockReturnValue({ type: 'module' });
 			const alreadyLoaded = new Set([MockModule]);
 			const expectedMessage =
 				'We have a cyclic dependency with MockModule module';
@@ -168,7 +175,7 @@ describe('AutoLoader', () => {
 			const Provider = class Provider {};
 			const Controller = class Controller {};
 
-			getMetadataSpy
+			mockGetMetadata
 				.mockReturnValueOnce({
 					type: 'module',
 					providers: [Provider],
@@ -189,7 +196,7 @@ describe('AutoLoader', () => {
 
 		it('should load a module with imported modules', () => {
 			const ImportedModule = class ImportedModule {};
-			getMetadataSpy
+			mockGetMetadata
 				.mockReturnValueOnce({ type: 'module', imports: [ImportedModule] })
 				.mockReturnValueOnce({ type: 'module' });
 

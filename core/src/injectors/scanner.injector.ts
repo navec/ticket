@@ -1,10 +1,7 @@
-import {
-	getMetadata,
-	DESIGN_PARAM_TYPES,
-	PROVIDER_SCOPE_METADATA,
-	Constructor,
-	InternalServerException,
-} from '..';
+import { DESIGN_PARAM_TYPES, PROVIDER_SCOPE_METADATA } from '@core/constants';
+import { getMetadata } from '@core/decorators';
+import { InternalServerException } from '@core/exceptions';
+import { Constructor } from '@core/types';
 
 export class AutoLoader {
 	public static moduleRegistry = new Map();

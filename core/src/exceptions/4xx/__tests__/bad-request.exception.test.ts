@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { BadRequestException } from '..';
-import { HTTP_STATUS } from '../../../../src/constants';
+import { BadRequestException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(BadRequestException.name, () => {
 	it('should create an instance with default message and status code', () => {

@@ -1,9 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
-import { Scanner } from '../scanner';
-import { ModuleScanner } from '../module.scanner';
+import { Scanner } from '@core/scanners';
 
-vi.mock('../module.scanner', () => ({
-	ModuleScanner: { scan: vi.fn() },
+const mockModuleScanner = jest.fn();
+jest.mock('../module.scanner', () => ({
+	ModuleScanner: { scan: (...args: unknown[]) => mockModuleScanner(...args) },
 }));
 
 describe('Scanner', () => {
@@ -13,6 +12,6 @@ describe('Scanner', () => {
 
 		scanner.scan(mockModule);
 
-		expect(ModuleScanner.scan).toHaveBeenCalledWith('TestModule', [mockModule]);
+		expect(mockModuleScanner).toHaveBeenCalledWith('TestModule', [mockModule]);
 	});
 });

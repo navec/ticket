@@ -1,4 +1,6 @@
-import { getMetadata, SCHEMA_PARAM_METADATA, UnknownFunction } from '..';
+import { SCHEMA_PARAM_METADATA } from '@core/constants';
+import { getMetadata } from '@core/decorators';
+import { UnknownFunction } from '@core/types';
 
 export class DtoExtractor {
 	constructor(

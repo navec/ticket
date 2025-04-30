@@ -1,19 +1,17 @@
-import http, { Server } from 'node:http';
-import { ServerAdapter } from '../../abstracts';
+import { Server, createServer } from 'node:http';
+import { ServerAdapter, ValidatorAdapter, ZodAdapter } from '@core/adapters';
 import { HttpServerRequestAdapter } from './request.adapter';
 import { HttpServerResponseAdapter } from './response.adapter';
+
+import { EndpointsRegistry } from '@core/registries';
 import {
 	BadRequestException,
-	DtoExtractor,
-	EndpointsRegistry,
 	HttpException,
 	InternalServerException,
 	NotFoundException,
-	RequestParamsExtractor,
-	ValidatorType,
-	ZodAdapter,
-} from '../../..';
-import { ValidatorAdapter } from '../../abstracts/validator.adapter';
+} from '@core/exceptions';
+import { DtoExtractor, RequestParamsExtractor } from '@core/extractors';
+import { ValidatorType } from '@core/enums';
 
 export class HttpServerAdapter extends ServerAdapter {
 	private server: Server;
@@ -30,7 +28,8 @@ export class HttpServerAdapter extends ServerAdapter {
 	constructor() {
 		super();
 
-		this.server = http.createServer(async (req, res) => {
+		// console.log({ createServer });
+		this.server = createServer(async (req, res) => {
 			const request = new HttpServerRequestAdapter(req);
 			const response = new HttpServerResponseAdapter(res);
 
@@ -78,6 +77,7 @@ export class HttpServerAdapter extends ServerAdapter {
 				const data = await endpoint.method.bound(...params);
 				response.send(data);
 			} catch (error) {
+				console.error(error);
 				const isHttpException = error instanceof HttpException;
 				response.send(isHttpException ? error : new InternalServerException());
 			}

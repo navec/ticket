@@ -1,10 +1,8 @@
-import {
-	Injector,
-	Scanner,
-	ServerAdapter,
-	RouterRegistry,
-	Constructor,
-} from '..';
+import { ServerAdapter } from '@core/adapters';
+import { Injector } from '@core/injectors';
+import { RouterRegistry } from '@core/routers';
+import { Scanner } from '@core/scanners';
+import { Constructor } from '@core/types';
 
 export class AppBuilder {
 	private scanner: Scanner;

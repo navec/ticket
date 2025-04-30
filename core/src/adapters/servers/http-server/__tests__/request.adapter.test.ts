@@ -1,8 +1,7 @@
 import { IncomingMessage } from 'node:http';
-import { describe, expect, it, vi } from 'vitest';
-import { HttpServerRequestAdapter } from '../request.adapter';
-import { EndpointsRegistry, ScoreValue } from 'core/src/registries';
-import { UnknownFunction } from 'core/src/types';
+import { EndpointsRegistry, ScoreValue } from '@core/registries';
+import { HttpServerRequestAdapter } from '@core/adapters';
+import { UnknownFunction } from '@core/types';
 
 describe(HttpServerRequestAdapter.name, () => {
 	const createMockRequest = (
@@ -11,7 +10,7 @@ describe(HttpServerRequestAdapter.name, () => {
 		const defaultRequest: Partial<IncomingMessage> = {
 			url: '/test?key=value',
 			headers: { host: 'localhost', 'content-type': 'application/json' },
-			on: vi.fn(),
+			on: jest.fn(),
 		};
 		return { ...defaultRequest, ...overrides } as IncomingMessage;
 	};
@@ -27,7 +26,7 @@ describe(HttpServerRequestAdapter.name, () => {
 	describe('body', () => {
 		it('should parse and return the JSON body', async () => {
 			const request = createMockRequest({
-				on: vi.fn((event: 'data' | 'end', listener: UnknownFunction) => {
+				on: jest.fn((event: 'data' | 'end', listener: UnknownFunction) => {
 					if (event === 'data') listener(Buffer.from('{"key":"value"}'));
 					if (event === 'end') listener();
 				}) as unknown as IncomingMessage['on'],
@@ -40,7 +39,7 @@ describe(HttpServerRequestAdapter.name, () => {
 
 		it('should return an empty object for an empty JSON body', async () => {
 			const request = createMockRequest({
-				on: vi.fn((event: 'data' | 'end', listener: UnknownFunction) => {
+				on: jest.fn((event: 'data' | 'end', listener: UnknownFunction) => {
 					if (event === 'data') listener(Buffer.from(''));
 					if (event === 'end') listener();
 				}) as unknown as IncomingMessage['on'],
@@ -54,7 +53,7 @@ describe(HttpServerRequestAdapter.name, () => {
 		it('should throw BadRequestException for invalid JSON', async () => {
 			const request = createMockRequest({
 				url: undefined,
-				on: vi.fn((event: 'data' | 'end', listener: UnknownFunction) => {
+				on: jest.fn((event: 'data' | 'end', listener: UnknownFunction) => {
 					if (event === 'data') listener('invalid-json');
 					if (event === 'end') listener();
 				}) as unknown as IncomingMessage['on'],
@@ -82,7 +81,7 @@ describe(HttpServerRequestAdapter.name, () => {
 	describe('path', () => {
 		it('should return route variables if the endpoint is registered', () => {
 			const request = createMockRequest({ url: '/users/123' });
-			vi.spyOn(EndpointsRegistry, 'get').mockReturnValueOnce({
+			jest.spyOn(EndpointsRegistry, 'get').mockReturnValueOnce({
 				path: '/users/:id',
 			} as ScoreValue);
 
@@ -92,7 +91,7 @@ describe(HttpServerRequestAdapter.name, () => {
 
 		it('should return an empty object if the endpoint is not registered', () => {
 			const request = createMockRequest({ url: '/unknown' });
-			vi.spyOn(EndpointsRegistry, 'get').mockReturnValueOnce(undefined);
+			jest.spyOn(EndpointsRegistry, 'get').mockReturnValueOnce(undefined);
 
 			const adapter = new HttpServerRequestAdapter(request);
 			expect(adapter.path).toEqual({});

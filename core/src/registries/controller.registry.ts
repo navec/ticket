@@ -1,4 +1,4 @@
-import { Constructor } from '../types';
+import { Constructor } from '@core/types';
 
 export class ControllersRegistry {
 	private static store = new Map<Constructor, { instance: unknown | null }>();

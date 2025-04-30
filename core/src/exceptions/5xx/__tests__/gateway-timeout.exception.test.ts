@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { GatewayTimeoutException } from '..';
-import { HTTP_STATUS } from '../../../constants';
+import { GatewayTimeoutException } from '@core/exceptions';
+import { HTTP_STATUS } from '@core/constants';
 
 describe(GatewayTimeoutException.name, () => {
 	it('should create an instance with default message and status code', () => {

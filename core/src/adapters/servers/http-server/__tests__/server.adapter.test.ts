@@ -1,58 +1,57 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import http from 'node:http';
-import { HttpServerAdapter } from '../server.adapter';
-import { EndpointsRegistry, ValidatorType, ZodAdapter } from '../../../..';
+import { HttpServerAdapter, ZodAdapter } from '@core/adapters';
+import { ValidatorType } from '@core/enums';
+import { EndpointsRegistry } from '@core/registries';
 
-vi.spyOn(http, 'createServer');
-vi.mock('node:http', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('node:http')>();
-	return { ...actual, createServer: vi.fn() };
-});
+jest.mock('@core/extractors/RequestParamsExtractor', () => ({
+	RequestParamsExtractor: class {
+		extract = () => Promise.resolve([]);
+	},
+}));
 
 describe('HttpServerAdapter', () => {
 	let serverAdapter: HttpServerAdapter;
+	let createServerSpy: jest.SpyInstance;
 
 	beforeEach(() => {
+		createServerSpy = jest.spyOn(http, 'createServer');
 		serverAdapter = new HttpServerAdapter();
 	});
 
 	it('should initialize the server', () => {
-		expect(http.createServer).toHaveBeenCalled();
+		expect(createServerSpy).toHaveBeenCalled();
 	});
 
 	it('should register a default middleware', () => {
-		const middleware = vi.fn();
+		const middleware = jest.fn();
+
 		serverAdapter.use(middleware);
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore - Accessing private property for testing
-		expect(serverAdapter.middlewares).toContainEqual({
-			type: 'default',
-			handler: middleware,
-		});
+		const expected = { type: 'default', handler: middleware };
+		expect(serverAdapter['middlewares']).toContainEqual(expected);
 	});
 
 	it('should register a Zod validator middleware', () => {
 		serverAdapter.useValidator(ValidatorType.ZOD);
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore - Accessing private property for testing
-		expect(serverAdapter.middlewares).toContainEqual({
+		expect(serverAdapter['middlewares']).toContainEqual({
 			type: 'validator',
 			handler: new ZodAdapter().validate,
 		});
 	});
 
 	it('should throw an error for unsupported validator types', () => {
-		expect(() =>
-			serverAdapter.useValidator('INVALID' as ValidatorType)
-		).toThrow(
+		const validator = 'INVALID' as ValidatorType;
+
+		const validatorCb = () => serverAdapter.useValidator(validator);
+
+		expect(validatorCb).toThrow(
 			'Validator type INVALID is not supported. Supported types are: ZOD'
 		);
 	});
 
 	it('should start the server on the specified port', async () => {
-		const listenMock = vi.fn((port, callback) => callback && callback());
+		const listenMock = jest.fn((_, callback) => callback && callback());
 		serverAdapter.serverInstance.listen = listenMock;
 
 		await serverAdapter.listen(3000);
@@ -61,7 +60,7 @@ describe('HttpServerAdapter', () => {
 	});
 
 	it('should handle unexpected errors during server startup', async () => {
-		serverAdapter.serverInstance.listen = vi.fn(() => {
+		serverAdapter.serverInstance.listen = jest.fn(() => {
 			throw new Error('Startup error');
 		});
 
@@ -72,7 +71,7 @@ describe('HttpServerAdapter', () => {
 
 	it('should return a 404 response for unknown routes', async () => {
 		const request = { url: '/test', headers: {} } as http.IncomingMessage;
-		const response = { setHeader: vi.fn(), finished: false, end: vi.fn() };
+		const response = { setHeader: jest.fn(), finished: false, end: jest.fn() };
 
 		serverAdapter.serverInstance.emit('request', request, response);
 
@@ -91,33 +90,20 @@ describe('HttpServerAdapter', () => {
 
 	it('should return success body response', async () => {
 		const endpoint = {
-			method: { bound: vi.fn(), name: 'test' },
-			controller: { test: vi.fn() },
+			method: { bound: jest.fn(), name: 'test' },
+			controller: { test: jest.fn() },
 			path: '/test',
 		};
 
-		vi.mock('../../../..', async (importOriginal) => {
-			const actual = await importOriginal<typeof import('../../../..')>();
-			return {
-				...actual,
-				EndpointsRegistry: { get: vi.fn() },
-				RequestParamsExtractor: class {
-					extract() {
-						return Promise.resolve([]);
-					}
-				},
-			};
-		});
-
-		vi.spyOn(EndpointsRegistry, 'get').mockReturnValueOnce(endpoint);
+		jest.spyOn(EndpointsRegistry, 'get').mockReturnValueOnce(endpoint);
 		endpoint.method.bound.mockImplementationOnce(() => ({ name: 'test' }));
 
 		const request = { url: '/test', headers: {}, method: 'POST' };
-		const response = { setHeader: vi.fn(), finished: false, end: vi.fn() };
-		vi.spyOn(response, 'end').mockImplementation((data) => data);
+		const response = { setHeader: jest.fn(), finished: false, end: jest.fn() };
+		jest.spyOn(response, 'end').mockImplementation((data) => data);
 
 		await new Promise<void>((resolve) => {
-			response.end = vi.fn(() => {
+			response.end.mockImplementation(() => {
 				resolve();
 				return response;
 			});

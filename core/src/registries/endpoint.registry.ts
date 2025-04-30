@@ -1,4 +1,4 @@
-import { UnknownFunction } from '../types';
+import { UnknownFunction } from '@core/types';
 
 export type ScoreValue = {
 	method: { bound: UnknownFunction; name: string };
