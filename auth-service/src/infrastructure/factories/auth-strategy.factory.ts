@@ -3,9 +3,8 @@ import { NotFoundException } from '@core/exceptions';
 
 import {
 	AUTH_STRATEGY_FACTORY,
-	LOCAL_AUTH_STRATEGY,
+	DEFAULT_AUTH_STRATEGY,
 	GOOGLE_AUTH_STRATEGY,
-	JWT_AUTH_STRATEGY,
 } from '@auth/shared';
 import {
 	AuthProvider,
@@ -18,17 +17,14 @@ export class AuthStrategyFactory extends AuthStrategyFactoryPort {
 	private readonly strategies = new Map<AuthProvider, AuthStrategyPort>();
 
 	constructor(
-		@Inject(LOCAL_AUTH_STRATEGY)
-		private readonly localAuthStrategy: AuthStrategyPort,
+		@Inject(DEFAULT_AUTH_STRATEGY)
+		private readonly defaultAuthStrategy: AuthStrategyPort,
 		@Inject(GOOGLE_AUTH_STRATEGY)
-		private readonly googleAuthStrategy: AuthStrategyPort,
-		@Inject(JWT_AUTH_STRATEGY)
-		private readonly jwtAuthStrategy: AuthStrategyPort
+		private readonly googleAuthStrategy: AuthStrategyPort
 	) {
 		super();
-		this.strategies.set(AuthProvider.LOCAL, this.localAuthStrategy);
+		this.strategies.set(AuthProvider.DEFAULT, this.defaultAuthStrategy);
 		this.strategies.set(AuthProvider.GOOGLE, this.googleAuthStrategy);
-		this.strategies.set(AuthProvider.JWT, this.jwtAuthStrategy);
 	}
 
 	getStrategy(provider: AuthProvider): AuthStrategyPort {

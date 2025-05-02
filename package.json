@@ -20,6 +20,7 @@
 		"lint:core": "npm run lint --workspace core",
 		"format": "prettier . --write",
 		"test": "jest",
+		"test:auth": "jest ./auth-service",
 		"test:watch": "jest --watch",
 		"test:coverage": "jest --coverage",
 		"prepare": "husky"

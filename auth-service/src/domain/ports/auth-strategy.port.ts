@@ -1,7 +1,5 @@
-import { Credentials } from '@auth/domain';
+import { Credentials, UserLogin } from '@auth/domain';
 
 export abstract class AuthStrategyPort {
-	abstract authenticate(
-		credentials: Credentials
-	): Promise<{ token: string; email: Credentials['email'] }>;
+	abstract authenticate(credentials: Credentials): Promise<UserLogin>;
 }

@@ -10,7 +10,7 @@ export class AuthController {
 	@Post('login')
 	login(
 		@BodyParam() credentials: CredentialsDto,
-		provider = AuthProvider.LOCAL
+		provider = AuthProvider.DEFAULT
 	) {
 		return this.loginUseCase.execute(provider, credentials);
 	}

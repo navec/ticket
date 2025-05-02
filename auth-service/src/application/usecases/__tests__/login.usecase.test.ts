@@ -8,7 +8,7 @@ describe('LoginUseCase', () => {
 	const useCase = new LoginUseCase(factories);
 
 	const [provider, credentials] = [
-		AuthProvider.LOCAL,
+		AuthProvider.DEFAULT,
 		{ email: 'myFake@email.com', password: 'testPass' },
 	];
 

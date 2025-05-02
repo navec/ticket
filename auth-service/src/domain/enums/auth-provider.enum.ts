@@ -1,5 +1,5 @@
 export enum AuthProvider {
-	LOCAL = 'local',
+	DEFAULT = 'default',
 	GOOGLE = 'google',
 	GITHUB = 'github',
 	JWT = 'jwt',

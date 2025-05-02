@@ -5,7 +5,9 @@ import {
 	AuthStrategyFactory,
 	GoogleAuthStrategy,
 	JwtAuthStrategy,
-	LocalAuthStrategy,
+	DefaultAuthStrategy,
+	UserRepositoryInMemory,
+	JwtService,
 } from '@auth/infrastructure';
 
 @Module({
@@ -13,9 +15,11 @@ import {
 	providers: [
 		LoginUseCase,
 		AuthStrategyFactory,
-		LocalAuthStrategy,
+		DefaultAuthStrategy,
 		GoogleAuthStrategy,
 		JwtAuthStrategy,
+		UserRepositoryInMemory,
+		JwtService,
 	],
 })
 export class AppModule {}

@@ -15,7 +15,7 @@ describe('AuthStrategyFactoryPort', () => {
 	it('should return a strategy for a given provider', () => {
 		factory.getStrategy.mockReturnValueOnce(dummyStrategy);
 
-		const strategy = factory.getStrategy(AuthProvider.LOCAL);
+		const strategy = factory.getStrategy(AuthProvider.DEFAULT);
 
 		expect(strategy).toBe(dummyStrategy);
 	});

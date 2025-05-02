@@ -24,7 +24,7 @@ describe(`${AuthController.name} controller`, () => {
 			email: 'myfake@email.com',
 		});
 		expect(loginUseCase.execute).toHaveBeenCalledWith(
-			AuthProvider.LOCAL,
+			AuthProvider.DEFAULT,
 			credentials
 		);
 	});
