@@ -4,7 +4,6 @@ import { LoginUseCase } from '@auth/application';
 import {
 	AuthStrategyFactory,
 	GoogleAuthStrategy,
-	JwtAuthStrategy,
 	DefaultAuthStrategy,
 	UserRepositoryInMemory,
 	JwtService,
@@ -17,7 +16,6 @@ import {
 		AuthStrategyFactory,
 		DefaultAuthStrategy,
 		GoogleAuthStrategy,
-		JwtAuthStrategy,
 		UserRepositoryInMemory,
 		JwtService,
 	],
