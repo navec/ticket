@@ -6,9 +6,9 @@ import { UnauthorizedException } from '@core/exceptions';
 import {
 	ALGORITHM,
 	AuthStrategyPort,
-	Credentials,
 	ENCODING,
 	JwtServicePort,
+	LocalCredentials,
 	UserRepositoryPort,
 } from '@auth/domain';
 import {
@@ -45,7 +45,7 @@ export class DefaultAuthStrategy extends AuthStrategyPort {
 	async authenticate({
 		email,
 		password,
-	}: Credentials): Promise<{ token: string; email: string }> {
+	}: LocalCredentials): Promise<{ token: string; email: string }> {
 		const user = await this.userRepository.findByEmail(email);
 
 		if (!user || !this.isValidPassword(user.passwordHash, password)) {
