@@ -14,8 +14,8 @@ export class LoginUseCase {
 		private readonly factory: AuthStrategyFactoryPort
 	) {}
 
-	async execute(provider: AuthProvider, credentials: Credentials) {
-		const strategy = this.factory.getStrategy(provider);
-		return await strategy.authenticate(credentials);
+	async execute(input: { provider: AuthProvider; credentials: Credentials }) {
+		const strategy = this.factory.getStrategy(input.provider);
+		return await strategy.authenticate(input.credentials);
 	}
 }

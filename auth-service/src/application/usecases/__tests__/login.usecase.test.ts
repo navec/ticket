@@ -22,7 +22,7 @@ describe('LoginUseCase', () => {
 
 		strategy.authenticate.mockResolvedValue(authResult);
 
-		const result = await useCase.execute(provider, credentials);
+		const result = await useCase.execute({ provider, credentials });
 
 		expect(factories.getStrategy).toHaveBeenCalledWith(provider);
 		expect(strategy.authenticate).toHaveBeenCalledWith(credentials);
@@ -33,7 +33,7 @@ describe('LoginUseCase', () => {
 		const error = new UnauthorizedException('Authentication failed');
 		strategy.authenticate.mockRejectedValue(error);
 
-		const executeCb = () => useCase.execute(provider, credentials);
+		const executeCb = () => useCase.execute({ provider, credentials });
 
 		await expect(executeCb).rejects.toThrow('Authentication failed');
 	});
