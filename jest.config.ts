@@ -15,7 +15,9 @@ const config: Config.InitialOptions = {
 		prefix: '<rootDir>/',
 	}),
 	modulePaths: ['<rootDir>'],
-	collectCoverage: true,
+	collectCoverage: false,
+
+	coverageReporters: ['text', 'lcov'],
 	coverageDirectory: 'coverage',
 	coverageThreshold: {
 		global: {

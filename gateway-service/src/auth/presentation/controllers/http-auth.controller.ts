@@ -1,7 +1,7 @@
 import { Controller, Post, BodyParam } from '@core/decorators';
 
 import { LoginUseCase } from '@auth/application/usecases/LoginUserUseCase';
-import { LoginDto } from './dtos/login.dto';
+import { LoginDto } from '@auth/presentation/dtos/login.dto';
 
 @Controller()
 export class HttpAuthController {

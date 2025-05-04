@@ -30,7 +30,9 @@ export class ControllerInjector {
 
 				const provider = ProvidersRegistry.get(providerName);
 				if (!provider) {
-					throw new InternalServerException("Provider doesn't exist");
+					throw new InternalServerException(
+						`Provider ${providerName} doesn't exist for ${target.name} controller, please check if ${providerName} is present in your module configuration`
+					);
 				}
 
 				return ProviderInjector.resolve(

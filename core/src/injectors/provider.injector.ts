@@ -36,7 +36,9 @@ export class ProviderInjector {
 					getMetadata(INJECT_METADATA, target, `${index}`) ?? dep.name;
 				const currentProvider = ProvidersRegistry.get(name);
 				if (!currentProvider) {
-					throw new InternalServerException("Provider doesn't exist");
+					throw new InternalServerException(
+						`Provider ${name} doesn't exist ${target.name} provider, please check if ${name} is present in your module configuration`
+					);
 				}
 				return this.resolve(
 					currentProvider.constructor,
