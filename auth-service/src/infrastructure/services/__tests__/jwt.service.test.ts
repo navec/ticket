@@ -72,7 +72,7 @@ describe(JwtService.name, () => {
 		});
 
 		const verified = jwtService.verify(token);
-		jwtService.revoke(verified.jti);
+		jwtService.revoke({ jti: verified.jti, sub: verified.sub });
 		const verifyCb = () => jwtService.verify(token);
 
 		expect(verifyCb).toThrow('Token revoked');

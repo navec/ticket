@@ -1,9 +1,10 @@
 import { JwtServicePort, UserRepositoryPort } from '@auth/domain';
-import { DefaultAuthStrategy } from '@auth/infrastructure';
+import { EmailPasswordAuthService } from '@auth/infrastructure';
 
-describe(DefaultAuthStrategy.name, () => {
+describe(EmailPasswordAuthService.name, () => {
 	const userRepository: jest.Mocked<UserRepositoryPort> = {
 		findByEmail: jest.fn(),
+		create: jest.fn(),
 	};
 	const jwtService: jest.Mocked<JwtServicePort> = {
 		sign: jest.fn(),
@@ -12,7 +13,7 @@ describe(DefaultAuthStrategy.name, () => {
 		isRevoked: jest.fn(),
 		revoke: jest.fn(),
 	};
-	const authStrategy: DefaultAuthStrategy = new DefaultAuthStrategy(
+	const emailPasswordAuthService = new EmailPasswordAuthService(
 		userRepository,
 		jwtService
 	);
@@ -22,7 +23,8 @@ describe(DefaultAuthStrategy.name, () => {
 			const credentials = { email: 'test@example.com', password: 'secret' };
 			userRepository.findByEmail.mockResolvedValue(null);
 
-			const authenticateCb = () => authStrategy.authenticate(credentials);
+			const authenticateCb = () =>
+				emailPasswordAuthService.authenticate(credentials);
 
 			await expect(authenticateCb).rejects.toThrow();
 		});
@@ -31,10 +33,14 @@ describe(DefaultAuthStrategy.name, () => {
 			const email = 'user@example.com';
 			const passwordHash =
 				'0ef5928305faf03f0a83ed5d747fed0fa2033f3452125a971c457b0cab404bfd';
-			userRepository.findByEmail.mockResolvedValueOnce({ email, passwordHash });
+			userRepository.findByEmail.mockResolvedValueOnce({
+				email,
+				passwordHash,
+				provider: 'email-password',
+			});
 
 			const authenticateCb = () =>
-				authStrategy.authenticate({ email, password: 'wrong' });
+				emailPasswordAuthService.authenticate({ email, password: 'wrong' });
 
 			await expect(authenticateCb).rejects.toThrow('Invalid credentials');
 		});
@@ -44,10 +50,14 @@ describe(DefaultAuthStrategy.name, () => {
 			const passwordHash =
 				'3881219d087dd9c634373fd33dfa33a2cb6bfc6c520b64b8bb60ef2ceb534ae7';
 
-			userRepository.findByEmail.mockResolvedValue({ email, passwordHash });
+			userRepository.findByEmail.mockResolvedValue({
+				email,
+				passwordHash,
+				provider: 'email-password',
+			});
 			jwtService.sign.mockReturnValue('validToken');
 
-			const result = await authStrategy.authenticate({
+			const result = await emailPasswordAuthService.authenticate({
 				email,
 				password: 'secret',
 			});

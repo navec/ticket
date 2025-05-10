@@ -5,20 +5,20 @@ import { UnauthorizedException } from '@core/exceptions';
 
 import {
 	ALGORITHM,
-	AuthStrategyPort,
+	AuthServicePort,
 	ENCODING,
 	JwtServicePort,
-	LocalCredentials,
+	EmailPasswordCredentials,
 	UserRepositoryPort,
 } from '@auth/domain';
 import {
-	DEFAULT_AUTH_STRATEGY,
+	EMAIL_PASSWORD_AUTH_SERVICE,
 	JWT_SERVICE,
 	USER_REPOSITORY_IN_MEMORY,
 } from '@auth/shared';
 
-@Injectable(DEFAULT_AUTH_STRATEGY)
-export class DefaultAuthStrategy extends AuthStrategyPort {
+@Injectable(EMAIL_PASSWORD_AUTH_SERVICE)
+export class EmailPasswordAuthService extends AuthServicePort {
 	constructor(
 		@Inject(USER_REPOSITORY_IN_MEMORY)
 		private readonly userRepository: UserRepositoryPort,
@@ -45,10 +45,13 @@ export class DefaultAuthStrategy extends AuthStrategyPort {
 	async authenticate({
 		email,
 		password,
-	}: LocalCredentials): Promise<{ token: string; email: string }> {
+	}: EmailPasswordCredentials): Promise<{ token: string; email: string }> {
 		const user = await this.userRepository.findByEmail(email);
 
-		if (!user || !this.isValidPassword(user.passwordHash, password)) {
+		if (
+			!user ||
+			(user.passwordHash && !this.isValidPassword(user.passwordHash, password))
+		) {
 			throw new UnauthorizedException('Invalid credentials');
 		}
 

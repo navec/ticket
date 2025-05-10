@@ -6,6 +6,6 @@ export abstract class JwtServicePort {
 	}): string;
 	abstract verify(token: string): Record<string, unknown>;
 	abstract refreshToken(token: string): string;
-	abstract revoke(jti: string): void;
+	abstract revoke(ids: { jti: string; sub: string }): void;
 	abstract isRevoked(jti: string): boolean;
 }

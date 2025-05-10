@@ -1,1 +1,1 @@
-export * from './default-user-in-memory.repository';
+export * from './user-in-memory.repository';
