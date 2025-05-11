@@ -1,48 +1,63 @@
-import { LoginUseCase } from '@auth/application';
-import { AuthProvider } from '@auth/domain';
+import {
+	EmailPasswordAuthUseCase,
+	GoogleAuthUseCase,
+	GoogleRedirectUrlUseCase,
+} from '@auth/application';
 import { AuthController } from '@auth/presentations';
 
 describe(`${AuthController.name} controller`, () => {
-	const loginUseCase = {
+	const emailPasswordAuthUseCase = {
 		execute: jest.fn(),
-	} as unknown as jest.Mocked<LoginUseCase>;
-	const authController = new AuthController(loginUseCase);
-	const credentials = { email: 'myfake@email.com', password: 'secret' };
+	} as unknown as jest.Mocked<EmailPasswordAuthUseCase>;
+	const googleRedirectUrlUseCase = {
+		execute: jest.fn(),
+	} as unknown as jest.Mocked<GoogleRedirectUrlUseCase>;
+	const googleAuthUseCase = {
+		execute: jest.fn(),
+	} as unknown as jest.Mocked<GoogleAuthUseCase>;
 
-	afterEach(loginUseCase.execute.mockClear);
+	const authController = new AuthController(
+		emailPasswordAuthUseCase,
+		googleRedirectUrlUseCase,
+		googleAuthUseCase
+	);
 
-	it(`should call loginUseCase.execute with default provider and credentials`, async () => {
-		loginUseCase.execute.mockResolvedValue({
-			token: 'my_fake_token',
-			email: credentials.email,
-		});
-
-		const result = await authController.login(credentials);
-
-		expect(result).toEqual({
-			token: 'my_fake_token',
+	it(`should call emailPasswordAuthUseCase.execute with email and password`, async () => {
+		const credentials = {
 			email: 'myfake@email.com',
-		});
-		expect(loginUseCase.execute).toHaveBeenCalledWith(
-			AuthProvider.DEFAULT,
-			credentials
-		);
+			password: 'secret',
+			confirmPassword: 'secret',
+		};
+		const emailWithToken = {
+			email: credentials.email,
+			token: 'my_fake_token',
+		};
+		emailPasswordAuthUseCase.execute.mockResolvedValue(emailWithToken);
+
+		const result = await authController.loginByEmailPassword(credentials);
+
+		expect(result).toEqual(emailWithToken);
+		expect(emailPasswordAuthUseCase.execute).toHaveBeenCalledWith(credentials);
 	});
 
-	it('should call loginUseCase.execute with provided provider and credentials', async () => {
-		const customProvider = 'CUSTOM' as AuthProvider;
+	it(`should return url for google provider`, async () => {
+		const redirectUrl = 'https://provider.com/redirect';
+		googleRedirectUrlUseCase.execute.mockResolvedValue(redirectUrl);
 
-		loginUseCase.execute.mockResolvedValue({
-			token: 'def456',
-			email: credentials.email,
-		});
+		const result = await authController.urlRedirectToGoogle();
 
-		const result = await authController.login(credentials, customProvider);
+		expect(result).toEqual(redirectUrl);
+		expect(googleRedirectUrlUseCase.execute).toHaveBeenCalled();
+	});
 
-		expect(result).toEqual({ token: 'def456', email: 'myfake@email.com' });
-		expect(loginUseCase.execute).toHaveBeenCalledWith(
-			customProvider,
-			credentials
-		);
+	it(`should call emailPasswordAuthUseCase.execute with google provider code`, async () => {
+		const emailWithToken = { email: 'user@email.com', token: 'my_fake_token' };
+		const providerCode = { code: 'my_fake_code' };
+		googleAuthUseCase.execute.mockResolvedValue(emailWithToken);
+
+		const result = await authController.loginByGoogleCode(providerCode);
+
+		expect(result).toEqual(emailWithToken);
+		expect(googleAuthUseCase.execute).toHaveBeenCalledWith(providerCode);
 	});
 });

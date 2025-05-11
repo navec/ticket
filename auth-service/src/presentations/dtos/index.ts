@@ -1,1 +1,1 @@
-export * from './credentials.dto';
+export * from './email-password-credentials.dto';

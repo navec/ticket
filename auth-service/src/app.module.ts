@@ -1,23 +1,34 @@
 import { Module } from '@core/decorators';
 import { AuthController } from '@auth/presentations';
-import { LoginUseCase } from '@auth/application';
 import {
-	AuthStrategyFactory,
-	GoogleAuthStrategy,
-	DefaultAuthStrategy,
+	EmailPasswordAuthUseCase,
+	GoogleAuthUseCase,
+	GoogleRedirectUrlUseCase,
+} from '@auth/application';
+import {
+	GoogleAuthService,
+	EmailPasswordAuthService,
 	UserRepositoryInMemory,
 	JwtService,
 } from '@auth/infrastructure';
+import { GoogleAuthRedirectUrlService } from './infrastructure/services/google.service/google-auth-redirect-url.service';
 
 @Module({
 	controllers: [AuthController],
 	providers: [
-		LoginUseCase,
-		AuthStrategyFactory,
-		DefaultAuthStrategy,
-		GoogleAuthStrategy,
+		// Use Cases
+		EmailPasswordAuthUseCase,
+		GoogleRedirectUrlUseCase,
+		GoogleAuthUseCase,
+
+		// Repositories
 		UserRepositoryInMemory,
+
+		// Services
 		JwtService,
+		EmailPasswordAuthService,
+		GoogleAuthService,
+		GoogleAuthRedirectUrlService,
 	],
 })
 export class AppModule {}

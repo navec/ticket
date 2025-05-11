@@ -1,17 +1,37 @@
-import { BodyParam, Controller, Post } from '@core/decorators';
-import { AuthProvider } from '@auth/domain';
-import { LoginUseCase } from '@auth/application';
-import { CredentialsDto } from '../dtos/credentials.dto';
+import { BodyParam, Controller, Get, Post, QueryParam } from '@core/decorators';
+import {
+	EmailPasswordAuthUseCase,
+	GoogleAuthUseCase,
+	GoogleRedirectUrlUseCase,
+} from '@auth/application';
+import { EmailPasswordCredentialsDto } from '@auth/presentations';
+import { GoogleCredentialsDto } from '../dtos/google-credentials.dto';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
-	constructor(private readonly loginUseCase: LoginUseCase) {}
+	constructor(
+		// Email and Password
+		private readonly emailPasswordAuthUseCase: EmailPasswordAuthUseCase,
 
-	@Post('login')
-	login(
-		@BodyParam() credentials: CredentialsDto,
-		provider = AuthProvider.DEFAULT
+		// Google
+		private readonly googleRedirectUrlUseCase: GoogleRedirectUrlUseCase,
+		private readonly googleAuthUseCase: GoogleAuthUseCase
+	) {}
+
+	@Post('email-password')
+	loginByEmailPassword(
+		@BodyParam() emailPassword: EmailPasswordCredentialsDto
 	) {
-		return this.loginUseCase.execute(provider, credentials);
+		return this.emailPasswordAuthUseCase.execute(emailPassword);
+	}
+
+	@Get('google/redirect')
+	urlRedirectToGoogle() {
+		return this.googleRedirectUrlUseCase.execute();
+	}
+
+	@Get('google/callback')
+	loginByGoogleCode(@QueryParam() { code }: GoogleCredentialsDto) {
+		return this.googleAuthUseCase.execute({ code });
 	}
 }

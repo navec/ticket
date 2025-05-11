@@ -16,6 +16,7 @@ import {
 @Injectable(JWT_SERVICE)
 export class JwtService implements JwtServicePort {
 	private readonly revokedJtiSet = new Set<string>();
+	private readonly activeTokens = new Map<string, string>();
 	private readonly DEFAULT_ACCESS_EXP = 300; // 5 min
 	private readonly DEFAULT_REFRESH_EXP = 86400; // 24h
 	private readonly secret = env.JWT_SECRET_V1 ?? 'secret';
@@ -35,6 +36,11 @@ export class JwtService implements JwtServicePort {
 		expiresInSec?: number;
 		isRefreshToken?: boolean;
 	}): string {
+		const sub = payload['sub']?.toString() ?? ''; // Should be user id or uuid
+		if (this.activeTokens.has(sub)) {
+			return this.activeTokens.get(sub)!;
+		}
+
 		const expirationDuration = isRefreshToken
 			? this.DEFAULT_ACCESS_EXP
 			: this.DEFAULT_REFRESH_EXP;
@@ -43,9 +49,8 @@ export class JwtService implements JwtServicePort {
 		const exp = iat + (expiresInSec ?? expirationDuration);
 		const jti = randomUUID();
 		const typ = isRefreshToken ? 'refresh' : 'access';
-		const sub = payload['sub']?.toString() ?? ''; // Should be user id or uuid
 
-		const header = { alg: 'HS256', typ: 'JWT' }; // TODO kid to store version (we can use it to get a good secret dynamicly)
+		const header = { alg: 'HS256', typ: 'JWT' };
 		const fullPayload = { ...payload, iat, exp, jti, sub, typ };
 
 		const encodedHeader = base64UrlEncode(Buffer.from(JSON.stringify(header)));
@@ -54,8 +59,10 @@ export class JwtService implements JwtServicePort {
 		);
 
 		const data = `${encodedHeader}.${encodedPayload}`;
+		const token = `${data}.${this.signData(data, this.secret)}`;
 
-		return `${data}.${this.signData(data, this.secret)}`;
+		this.activeTokens.set(sub, token);
+		return token;
 	}
 
 	private decode(token: string): {
@@ -109,7 +116,8 @@ export class JwtService implements JwtServicePort {
 		return payload;
 	}
 
-	revoke(jti: string): void {
+	revoke({ jti, sub }: { jti: string; sub: string }): void {
+		this.activeTokens.delete(sub);
 		this.revokedJtiSet.add(jti);
 	}
 
@@ -119,7 +127,7 @@ export class JwtService implements JwtServicePort {
 			throw new UnauthorizedException('Invalid token type');
 		}
 
-		this.revoke(payload.jti); // Revoke old token
+		this.revoke(payload); // Revoke old token
 		return this.sign({ payload });
 	}
 }

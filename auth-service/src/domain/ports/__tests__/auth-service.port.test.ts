@@ -1,28 +1,28 @@
-import { AuthStrategyPort } from '@auth/domain';
+import { AuthServicePort } from '@auth/domain';
 import { UnauthorizedException } from '@core/exceptions';
 
-describe(AuthStrategyPort.name, () => {
+describe(AuthServicePort.name, () => {
 	const credentials = { email: 'user@example.com', password: 'password123' };
-	const strategy: jest.Mocked<AuthStrategyPort> = { authenticate: jest.fn() };
+	const authService: jest.Mocked<AuthServicePort> = { authenticate: jest.fn() };
 
-	afterEach(strategy.authenticate.mockClear);
+	afterEach(authService.authenticate.mockClear);
 
 	it('should resolve authentication with provided credentials', async () => {
-		strategy.authenticate.mockResolvedValueOnce({
+		authService.authenticate.mockResolvedValueOnce({
 			token: 'fake_token',
 			email: credentials.email,
 		});
 
-		const result = await strategy.authenticate(credentials);
+		const result = await authService.authenticate(credentials);
 
 		expect(result).toEqual({ email: 'user@example.com', token: 'fake_token' });
 	});
 
 	it('should propagate errors from the authenticate method', async () => {
 		const error = new UnauthorizedException('Authentication failed');
-		strategy.authenticate.mockRejectedValueOnce(error);
+		authService.authenticate.mockRejectedValueOnce(error);
 
-		const strategyCb = () => strategy.authenticate(credentials);
+		const strategyCb = () => authService.authenticate(credentials);
 
 		await expect(strategyCb).rejects.toThrow('Authentication failed');
 	});
