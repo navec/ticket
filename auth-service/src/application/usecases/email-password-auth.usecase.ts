@@ -16,7 +16,7 @@ export class EmailPasswordAuthUseCase {
 	) {
 		if (credentials.confirmPassword !== credentials.password) {
 			throw new BadRequestException(
-				'Password and confirm password do not match'
+				'Password and confirmPassword do not match'
 			);
 		}
 		return this.emailPasswordAuthService.authenticate(credentials);

@@ -14,7 +14,7 @@ describe(EmailPasswordAuthUseCase.name, () => {
 
 		expect(emailPasswordAuthService.authenticate).not.toHaveBeenCalled();
 		expect(authenticateFn).rejects.toThrow(
-			'Password and confirm password do not match'
+			'Password and confirmPassword do not match'
 		);
 	});
 
