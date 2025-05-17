@@ -9,9 +9,10 @@
 	"scripts": {
 		"prebuild": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
 		"build": "tsc",
-		"test": "cd .. && npm run test core/",
-		"test:watch": "cd .. && npm run test:watch core/",
-		"test:coverage": "cd .. && npm run test:coverage core/",
+		"test": "jest",
+		"test:unit": "jest src/**",
+		"test:watch": "jest --watch",
+		"test:coverage": "jest --coverage",
 		"lint": "eslint . --fix --max-warnings=0  --ignore-path ../.eslintignore",
 		"format": "prettier . --write"
 	},

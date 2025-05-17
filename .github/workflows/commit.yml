@@ -1,0 +1,22 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  commit-message-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check commit message format
+        run: |
+          messages=$(git log --format=%s origin/${{ github.base_ref }}..HEAD)
+          echo "$messages" | grep -E '^(feat|fix|chore|docs|style|refactor|test|perf)(\(.+\))?: .+' || {
+            echo "❌ Commit messages must follow conventional format like 'feat: add new feature'";
+            exit 1;
+          }

@@ -16,11 +16,11 @@
 		"build:identity": "npm run build --workspace auth-service",
 		"build:authentication": "npm run build --workspace authentication-service",
 		"build": "npm run build --workspaces --if-present",
-		"lint": "eslint . --fix --max-warnings=0",
-		"lint:core": "npm run lint --workspace core",
-		"format": "prettier . --write",
-		"test": "jest",
-		"test:auth": "jest ./auth-service",
+		"lint": "npm run lint --workspaces --if-present",
+		"format": "npm run format --workspaces --if-present",
+		"test": "npm run test --workspaces --if-present",
+		"test:unit": "npm run test:unit --workspaces --if-present",
+		"test:e2e": "npm run test:e2e --workspaces --if-present",
 		"test:watch": "jest --watch",
 		"test:coverage": "jest --coverage",
 		"prepare": "husky"
@@ -29,6 +29,7 @@
 		"node": ">=20.x"
 	},
 	"devDependencies": {
+		"@commitlint/config-conventional": "^19.8.1",
 		"@eslint/js": "^9.25.1",
 		"@jest/globals": "^29.7.0",
 		"@swc/core": "^1.11.22",
@@ -37,6 +38,7 @@
 		"@types/sinon": "^17.0.4",
 		"@types/supertest": "^6.0.3",
 		"@typescript-eslint/eslint-plugin": "^8.31.0",
+		"commitlint": "^19.8.1",
 		"detect-port": "^2.1.0",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^10.1.2",
