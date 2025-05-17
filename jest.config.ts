@@ -10,6 +10,7 @@ const config: Config.InitialOptions = {
 	testMatch: [
 		'**/__tests__/**/*.test.[jt]s?(x)',
 		'**/features/**/*.test.[jt]s?(x)',
+		'**/e2e/**/*.test.[jt]s?(x)',
 	],
 	transform: {
 		'^.+\\.tsx?$': 'ts-jest',
