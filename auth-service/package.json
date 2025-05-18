@@ -10,18 +10,21 @@
 	"scripts": {
 		"prebuild": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
 		"build": "tsc",
+		"postbuild": "tsc-alias",
 		"clean": "rm -rf dist",
 		"test": "jest",
 		"test:unit": "jest src/**",
 		"test:e2e": "jest e2e/**",
 		"test:watch": "jest --watch",
+		"pretest:coverage": "rm -rf coverage",
 		"test:coverage": "jest --coverage",
 		"lint": "eslint . --fix --max-warnings=0  --ignore-path ../.eslintignore",
 		"format": "prettier . --write",
 		"dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only  --env-file=.env src/main.ts",
-		"start": "ts-node --project ./tsconfig.json -r tsconfig-paths/register dist/main.js"
+		"start": "node dist/main.js"
 	},
 	"dependencies": {
-		"google-auth-library": "^9.15.1"
+		"google-auth-library": "^9.15.1",
+		"@ticket/core": "*"
 	}
 }

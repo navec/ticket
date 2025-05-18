@@ -1,4 +1,4 @@
-import { Module } from '@core/decorators';
+import { Module } from '@ticket/core';
 import { AuthController } from '@auth/presentations';
 import {
 	EmailPasswordAuthUseCase,

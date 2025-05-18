@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@core/decorators';
+import { Inject, Injectable } from '@ticket/core';
 
 import { AuthRedirectUrlPort } from '@auth/domain';
 import { GOOGLE_AUTH_REDIRECT_URL_SERVICE } from '@auth/shared';

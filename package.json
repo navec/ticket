@@ -12,9 +12,6 @@
 	"author": "Navec Gael Batchi",
 	"license": "ISC",
 	"scripts": {
-		"build:core": "npm run build --workspace core",
-		"build:identity": "npm run build --workspace auth-service",
-		"build:authentication": "npm run build --workspace authentication-service",
 		"build": "npm run build --workspaces --if-present",
 		"lint": "npm run lint --workspaces --if-present",
 		"format": "npm run format --workspaces --if-present",
@@ -52,6 +49,7 @@
 		"supertest": "^7.1.0",
 		"ts-jest": "^29.3.2",
 		"ts-node": "^10.9.2",
+		"tsc-alias": "^1.8.16",
 		"tsconfig-paths": "^4.2.0",
 		"tsconfig-paths-jest": "^0.0.1",
 		"tsup": "^8.4.0",

@@ -21,6 +21,7 @@ const config: Config.InitialOptions = {
 	modulePaths: ['<rootDir>'],
 	collectCoverage: false,
 
+	coveragePathIgnorePatterns: ['/node_modules/', '/dist/'],
 	coverageReporters: ['text', 'lcov'],
 	coverageDirectory: 'coverage',
 	coverageThreshold: {

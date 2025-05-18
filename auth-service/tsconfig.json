@@ -8,7 +8,6 @@
 		"outDir": "dist",
 		"declaration": true,
 		"paths": {
-			"@core/*": ["../core/src/*"],
 			"@auth/*": ["./src/*"]
 		}
 	},

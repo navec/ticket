@@ -1,8 +1,11 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import { env } from 'node:process';
 
-import { Injectable } from '@core/decorators';
-import { BadRequestException, UnauthorizedException } from '@core/exceptions';
+import {
+	Injectable,
+	BadRequestException,
+	UnauthorizedException,
+} from '@ticket/core';
 
 import { ALGORITHM, ENCODING, JwtServicePort } from '@auth/domain';
 import { JWT_SERVICE } from '@auth/shared';

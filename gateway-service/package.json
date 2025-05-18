@@ -10,6 +10,7 @@
 	"scripts": {
 		"prebuild": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
 		"build": "tsc",
+		"postbuild": "tsc-alias",
 		"clean": "rm -rf dist",
 		"test": "cd .. && npm run test core/",
 		"test:watch": "cd .. && npm run test:watch core/",
