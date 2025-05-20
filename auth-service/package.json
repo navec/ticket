@@ -23,6 +23,7 @@
 		"start": "node dist/main.js"
 	},
 	"dependencies": {
+		"@ticket/core": "^1.0.0",
 		"google-auth-library": "^9.15.1"
 	}
 }
