@@ -1,5 +1,4 @@
-import { AppBootFactory } from '@core/boot';
-import { ValidatorType } from '@core/enums';
+import { AppBootFactory, ValidatorType } from '@ticket/core';
 
 import { AppModule } from './app.module';
 import { env } from 'node:process';

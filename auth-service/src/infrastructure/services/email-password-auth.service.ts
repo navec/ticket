@@ -1,7 +1,6 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
 
-import { Inject, Injectable } from '@core/decorators';
-import { UnauthorizedException } from '@core/exceptions';
+import { Inject, Injectable, UnauthorizedException } from '@ticket/core';
 
 import {
 	ALGORITHM,

@@ -1,4 +1,4 @@
-import { Module } from '@core/decorators';
+import { Module } from '@ticket/core';
 import { HttpAuthController } from '@auth/presentation/controllers/http-auth.controller';
 import { LoginUseCase } from '@auth/application/usecases/LoginUserUseCase';
 import { HttpAuthService } from '@auth/infrastructure/services/HttpAuthService';

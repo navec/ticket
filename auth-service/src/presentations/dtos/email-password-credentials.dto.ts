@@ -1,4 +1,4 @@
-import { DtoSchema } from '@core/decorators';
+import { DtoSchema } from '@ticket/core';
 
 import { z } from 'zod';
 

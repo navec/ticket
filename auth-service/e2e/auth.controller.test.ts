@@ -2,9 +2,10 @@ import request from 'supertest';
 import { Server } from 'node:http';
 import sinon from 'sinon';
 
+import { ValidatorType } from '@ticket/core';
+
 import { AppModule } from '@auth/app.module';
 import { AuthController } from '@auth/presentations';
-import { ValidatorType } from '@core/enums';
 import { TestingModule } from './utils/TestingModule';
 import { OAuth2Client } from 'google-auth-library';
 

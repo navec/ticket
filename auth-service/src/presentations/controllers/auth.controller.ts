@@ -1,4 +1,4 @@
-import { BodyParam, Controller, Get, Post, QueryParam } from '@core/decorators';
+import { BodyParam, Controller, Get, Post, QueryParam } from '@ticket/core';
 import {
 	EmailPasswordAuthUseCase,
 	GoogleAuthUseCase,

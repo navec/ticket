@@ -1,9 +1,11 @@
-import { AppBootFactory } from '@core/boot';
-import { ValidatorType } from '@core/enums';
-import { Constructor } from '@core/types';
+import {
+	AppBootFactory,
+	ValidatorType,
+	Constructor,
+	ServerAdapter,
+	InternalServerException,
+} from '@ticket/core';
 import { getHttpPort } from './getHttpPort';
-import { ServerAdapter } from '@core/adapters';
-import { InternalServerException } from '@core/exceptions';
 
 export class TestingModule {
 	private app: ServerAdapter | undefined;
