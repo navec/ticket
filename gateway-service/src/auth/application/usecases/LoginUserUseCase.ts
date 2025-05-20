@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@core/decorators';
+import { Injectable, Inject } from '@ticket/core';
 import { AuthServicePort } from '@auth/domain/ports/AuthServicePort';
 
 @Injectable()

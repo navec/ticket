@@ -1,5 +1,6 @@
+import { Injectable } from '@ticket/core';
+
 import { User, UserRepositoryPort } from '@auth/domain';
-import { Injectable } from '@core/decorators';
 import { USER_REPOSITORY_IN_MEMORY } from '@auth/shared';
 
 import { DEFAULT_USERS } from '../stores/default-user.store';

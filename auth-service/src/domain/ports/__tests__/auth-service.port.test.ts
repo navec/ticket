@@ -1,5 +1,6 @@
+import { UnauthorizedException } from '@ticket/core';
+
 import { AuthServicePort } from '@auth/domain';
-import { UnauthorizedException } from '@core/exceptions';
 
 describe(AuthServicePort.name, () => {
 	const credentials = { email: 'user@example.com', password: 'password123' };

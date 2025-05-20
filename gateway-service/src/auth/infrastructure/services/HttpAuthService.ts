@@ -1,5 +1,5 @@
 import { AuthServicePort } from '@auth/domain/ports/AuthServicePort';
-import { Injectable } from '@core/decorators';
+import { Injectable } from '@ticket/core';
 import { config } from '@gateway/config';
 
 @Injectable('HttpAuthService')

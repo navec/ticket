@@ -1,4 +1,5 @@
-import { PATH_METADATA, Get, Post, Put, Delete, Patch } from 'core/src';
+import { PATH_METADATA } from '@core/constants';
+import { Get, Post, Put, Delete, Patch } from '@core/decorators';
 
 describe('createHttpRequest', () => {
 	it.each([

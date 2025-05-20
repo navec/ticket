@@ -1,8 +1,7 @@
-import { Inject, Injectable } from '@core/decorators';
+import { Inject, Injectable, BadRequestException } from '@ticket/core';
 
 import { AuthServicePort, EmailPasswordCredentials } from '@auth/domain';
 import { EMAIL_PASSWORD_AUTH_SERVICE } from '@auth/shared';
-import { BadRequestException } from '@core/exceptions';
 
 @Injectable()
 export class EmailPasswordAuthUseCase {

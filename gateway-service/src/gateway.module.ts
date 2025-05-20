@@ -1,4 +1,4 @@
-import { Module } from '@core/decorators';
+import { Module } from '@ticket/core';
 
 @Module({})
 export class AppModule {}

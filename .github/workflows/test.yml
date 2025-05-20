@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.18.2'
+          cache: 'npm'
       - run: npm install
       - run: npm run lint
 
@@ -24,7 +25,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.18.2'
+          cache: 'npm'
       - run: npm install
+      - run: npm run build --workspaces
       - run: npm run test:unit
 
   e2e-tests:
@@ -34,7 +37,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.18.2'
+          cache: 'npm'
       - run: npm install
+      - run: npm run build --workspaces
       - run: npm run test:e2e
 
   coverage-tests:
@@ -44,7 +49,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.18.2'
+          cache: 'npm'
       - run: npm install
+      - run: npm run build --workspaces
       - run: npm run test:coverage
 
   perform-code-analysis:
@@ -56,6 +63,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.18.2'
+          cache: 'npm'
 
       - name: Cache node modules
         uses: actions/cache@v3
