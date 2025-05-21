@@ -1,0 +1,67 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - '5672:5672' # AMQP
+      - '15672:15672' # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: ./gateway-service/Dockerfile
+    container_name: gateway-service
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/mydb
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./auth-service/Dockerfile
+    container_name: auth-service
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+    ports:
+      - '3001:3001'
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/mydb
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672
+
+volumes:
+  pgdata:
