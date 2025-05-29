@@ -2,6 +2,7 @@ import { IncomingMessage } from 'node:http';
 import { EndpointsRegistry, ScoreValue } from '@core/registries';
 import { HttpServerRequestAdapter } from '@core/adapters';
 import { UnknownFunction } from '@core/types';
+import { HttpMethod } from '@core/enums';
 
 describe(HttpServerRequestAdapter.name, () => {
 	const createMockRequest = (
@@ -80,7 +81,10 @@ describe(HttpServerRequestAdapter.name, () => {
 
 	describe('path', () => {
 		it('should return route variables if the endpoint is registered', () => {
-			const request = createMockRequest({ url: '/users/123' });
+			const request = createMockRequest({
+				url: '/users/123',
+				method: HttpMethod[HttpMethod.PATCH],
+			});
 			jest.spyOn(EndpointsRegistry, 'get').mockReturnValueOnce({
 				path: '/users/:id',
 			} as ScoreValue);
@@ -90,7 +94,10 @@ describe(HttpServerRequestAdapter.name, () => {
 		});
 
 		it('should return an empty object if the endpoint is not registered', () => {
-			const request = createMockRequest({ url: '/unknown' });
+			const request = createMockRequest({
+				url: '/unknown',
+				method: HttpMethod[HttpMethod.PATCH],
+			});
 			jest.spyOn(EndpointsRegistry, 'get').mockReturnValueOnce(undefined);
 
 			const adapter = new HttpServerRequestAdapter(request);

@@ -19,7 +19,9 @@
 		"test:coverage": "jest --coverage",
 		"lint": "eslint . --fix --max-warnings=0  --ignore-path ../.eslintignore",
 		"format": "prettier . --write",
-		"dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only  --env-file=.env src/main.ts",
+		"dev:core": "tsc -b ../core --watch & tsc-alias ../core -w",
+		"dev:auth": "ts-node-dev --exit-child -r tsconfig-paths/register --respawn --transpile-only --env-file=.env src/main.ts",
+		"dev": "npm-run-all --parallel dev:core dev:auth",
 		"start": "node dist/main.js"
 	},
 	"dependencies": {

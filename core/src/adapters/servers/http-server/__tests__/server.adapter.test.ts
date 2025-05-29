@@ -1,6 +1,6 @@
 import http from 'node:http';
 import { HttpServerAdapter, ZodAdapter } from '@core/adapters';
-import { ValidatorType } from '@core/enums';
+import { HttpMethod, ValidatorType } from '@core/enums';
 import { EndpointsRegistry } from '@core/registries';
 
 jest.mock('@core/extractors/RequestParamsExtractor', () => ({
@@ -70,7 +70,11 @@ describe('HttpServerAdapter', () => {
 	});
 
 	it('should return a 404 response for unknown routes', async () => {
-		const request = { url: '/test', headers: {} } as http.IncomingMessage;
+		const request = {
+			url: '/test',
+			headers: {},
+			method: 'GET',
+		} as http.IncomingMessage;
 		const response = { setHeader: jest.fn(), finished: false, end: jest.fn() };
 
 		serverAdapter.serverInstance.emit('request', request, response);
@@ -92,6 +96,7 @@ describe('HttpServerAdapter', () => {
 		const endpoint = {
 			method: { bound: jest.fn(), name: 'test' },
 			controller: { test: jest.fn() },
+			type: HttpMethod.POST,
 			path: '/test',
 		};
 
