@@ -31,14 +31,19 @@ export class RouterRegistry {
 				.forEach((methodName) => {
 					const method = controllerInstance[methodName];
 					const path: string = getMetadata(PATH_METADATA, method);
+					const formattedPath = path.endsWith('/') ? path.slice(0, -1) : path;
 					const type = getMetadata(METHOD_METADATA, method);
 					const boundMethod = method.bind(controllerInstance);
+					const finalPath = basePath
+						? `/${basePath}${formattedPath}`
+						: formattedPath;
 					console.log(
 						'\x1b[33m',
-						`[INFO] : ${HttpMethod[type]} ${basePath}${path} of ${methodName.toString()} in ${controller.name} controller`
+						`[INFO] : ${HttpMethod[type]} ${finalPath} of ${methodName.toString()} in ${controller.name} controller`
 					);
-					EndpointsRegistry.register(basePath ? `/${basePath}${path}` : path, {
+					EndpointsRegistry.register(finalPath, {
 						controller: controllerInstance,
+						type,
 						method: { bound: boundMethod, name: methodName.toString() },
 					});
 				});

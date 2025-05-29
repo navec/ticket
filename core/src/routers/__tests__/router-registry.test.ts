@@ -2,6 +2,7 @@ import { RouterRegistry } from '@core/routers';
 import { Constructor } from '@core/types';
 import { ControllersRegistry } from '@core/registries';
 import { METHOD_METADATA, PATH_METADATA } from '@core/constants';
+import { HttpMethod } from '@core/enums';
 
 const mockGetMetadata = jest.fn();
 jest.mock('@core/decorators', () => ({
@@ -78,6 +79,7 @@ describe('RouterRegistry', () => {
 			{
 				controller: instance,
 				method: { bound: expect.any(Function), name: 'methodOne' },
+				type: HttpMethod[HttpMethod.GET],
 			}
 		);
 		expect(mockEndpointsRegistry).toHaveBeenNthCalledWith(
@@ -86,6 +88,7 @@ describe('RouterRegistry', () => {
 			{
 				controller: instance,
 				method: { bound: expect.any(Function), name: 'methodTwo' },
+				type: HttpMethod[HttpMethod.POST],
 			}
 		);
 	});
@@ -117,6 +120,7 @@ describe('RouterRegistry', () => {
 		expect(mockEndpointsRegistry).toHaveBeenCalledWith('/base/method-one', {
 			controller: instance,
 			method: { bound: expect.any(Function), name: 'methodOne' },
+			type: HttpMethod[HttpMethod.GET],
 		});
 		expect(mockEndpointsRegistry).not.toHaveBeenCalledWith(
 			'/base/method-two',

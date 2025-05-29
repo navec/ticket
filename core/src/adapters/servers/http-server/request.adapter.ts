@@ -2,6 +2,7 @@ import { IncomingMessage } from 'node:http';
 import { Request } from '@core/adapters';
 import { EndpointsRegistry } from '@core/registries';
 import { BadRequestException } from '@core/exceptions';
+import { HttpMethod } from '@core/enums';
 import { URL } from 'url';
 
 export class HttpServerRequestAdapter extends Request {
@@ -10,6 +11,17 @@ export class HttpServerRequestAdapter extends Request {
 	constructor(private request: IncomingMessage) {
 		super();
 		this.url = new URL(request.url || '', `http://${request.headers.host}`);
+	}
+
+	get method(): HttpMethod {
+		const httpMethod =
+			HttpMethod[this.request.method as keyof typeof HttpMethod];
+		if (httpMethod === undefined) {
+			throw new BadRequestException(
+				`Invalid HTTP method: ${this.request.method}`
+			);
+		}
+		return httpMethod;
 	}
 
 	get pathname(): string {
@@ -36,7 +48,7 @@ export class HttpServerRequestAdapter extends Request {
 	}
 
 	get path() {
-		const endpoint = EndpointsRegistry.get(this.url.pathname);
+		const endpoint = EndpointsRegistry.get(this.url.pathname, this.method);
 		if (!endpoint) {
 			return {};
 		}

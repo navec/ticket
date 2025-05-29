@@ -14,7 +14,9 @@
 		"clean": "rm -rf dist",
 		"lint": "eslint . --fix --max-warnings=0  --ignore-path ../.eslintignore",
 		"format": "prettier . --write",
-		"dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only  --env-file=.env src/main.ts",
+		"dev:core": "tsc -b ../core --watch & tsc-alias ../core -w",
+		"dev:gateway": "ts-node-dev --exit-child -r tsconfig-paths/register --respawn --transpile-only --env-file=.env src/main.ts",
+		"dev": "npm-run-all --parallel dev:core dev:gateway",
 		"start": "node dist/main.js"
 	},
 	"dependencies": {

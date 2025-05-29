@@ -34,7 +34,10 @@ export class HttpServerAdapter extends ServerAdapter {
 			const response = new HttpServerResponseAdapter(res);
 
 			try {
-				const endpoint = EndpointsRegistry.get(request.pathname);
+				const endpoint = EndpointsRegistry.get(
+					request.pathname,
+					request.method
+				);
 				if (!endpoint) {
 					response.send(new NotFoundException(`${request.pathname} not found`));
 					return;
